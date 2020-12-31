@@ -289,9 +289,7 @@ public class Project1 extends Project {
 		 */
 		String sanitizedText = Normalizer.normalize(unsanitizedText, Form.NFKC);
 		
-		sanitizedText = sanitizedText.replaceAll("\\r\\n", "\n");
-		sanitizedText = sanitizedText.replaceAll("\\r", "\n");
-		sanitizedText = sanitizedText.replaceAll("\t", "\n");
+		sanitizedText = sanitizedText.replaceAll("[\n|\r|\t]", "_");
 		
 		AppLogger.log("Error: " + sanitizedText);
 		// SOLUTION END
