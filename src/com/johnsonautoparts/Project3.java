@@ -278,13 +278,13 @@ public class Project3 extends Project {
 		/*
 		 * SOLUTION: The line below is the error in the code. The docs_accessed attribute
 		 *           is updated before the DB commands complete successfully. If the attribute
-		 *           is used to tracking licensing or other security features than this bug
+		 *           is used to track licensing or other security features than this bug
 		 *           would present as a critical error. 
 		 *           
 		 *           There are multiple ways to fix the issue. The finally block could be used
 		 *           to roll back change or the attribute could be set after all commands have
 		 *           executed which could possible throw exceptions. For this example we will
-		 *           set the attribute incrementing after the SQL commands have executed.
+		 *           set the attribute increment after the SQL commands have executed.
 		 *           
 		 *           The lines below are commented out.
 		 *
@@ -403,7 +403,7 @@ public class Project3 extends Project {
 		finally {
 			/*
 			 * SOLUTION: The return statement blocks the program flow so it needs to be removed.
-			 *           The larger problem is the close() call which can throw and exception that
+			 *           The larger problem is the close() call which can throw an exception that
 			 *           will not be caught and would be thrown by the flowHandling method.
 			 *           
 			 *           The following lines are commented out and the close() method is surrounded
@@ -556,13 +556,13 @@ public class Project3 extends Project {
 	 */
 	public boolean testNull(String str) throws AppException {
 	//SOLUTION END
-
+	
 			/**
-			 * SOLUTION: values should always be checked for null to avoid nullpointer exception.
+			 * SOLUTION: values should always be checked for null to avoid NullPointerException.
 			 *           NullPointer should never be caught since it represents an major application
 			 *           error.
 			 *           
-			 *           The str parameter is tested for null before using the isEmpty() method
+			 *           The str parameter should be tested for null before using the isEmpty() method
 			 */
 			if(str == null) {
 				throw new AppException("testNull was passed a null variable", "application error");
@@ -662,7 +662,7 @@ public class Project3 extends Project {
 		/**
 		 * SOLUTION: The developer created an error by not understanding the difference between
 		 *           the logical operation || and the bitwise comparison |. The logical version
-		 *           with short-circuit and not execute further commands. With bitwise 
+		 *           will short-circuit and not execute further commands. While the bitwise 
 		 *           comparison will execute all commands so even if the test for null fails in 
 		 *           the first part, the isEmpty() will still be executed on the null str variable.
 		 *           
@@ -747,18 +747,39 @@ public class Project3 extends Project {
 	 *              if the possible infinite loop in the Thread continues waiting for the session
 	 *              variable which never appears.
 	 * 
-	 * REF: CMU Software Engineering Institute ERR53-J
+	 * REF: CMU Software Engineering Institute ERR53-J, ERR08-J-EX0
 	 * 
 	 * @param query
 	 * @return String
 	 */
-	public String recoverState(String str) {
+	public void recoverState(String str) throws AppException {
 		//create the thread to look for the data_id attribute in the session so we can
 		//do further processing
-		Thread t = new Thread(new CheckSession(httpRequest.getSession()));
-		t.start();
-		
-		return str;
+		/*
+		 * SOLUTION: The previous example disallowed catching all exceptions, but one exception is 
+		 *           allowed when the catch is used to check for specific errors, free resources,
+		 *           and re-throw. We need to surround the Thread in a try and catch Throwable.
+		 *           
+		 *           The following line is commented out:
+		 *           
+		 * Thread t = new Thread(new CheckSession(httpRequest.getSession()));
+		 * t.start();
+		 */
+		Thread t=null;
+		try {	
+			t = new Thread(new CheckSession(httpRequest.getSession()));
+			
+			t.start();
+		}
+		catch(Throwable throwable) {
+			//at this point all memory resource may have been consumed but try to null the thread
+			//and suggest Java perform Garbage collection
+			t=null;
+			System.gc(); //does not guarantee GC but only option
+			AppLogger.log("recoverState exhausting resources and garbage collection attempted");
+			throw new AppException("recoverState exahusted resources", "application error");
+		}
+		//SOLUTION END
 	}
 	
 	/**
