@@ -5,6 +5,8 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.Locale;
 import java.util.Map;
 
@@ -40,7 +42,49 @@ public class ServletHandler extends HttpServlet {
   		super();
   	}
   	
+  	
+  	/**
+  	 * Out of band used test functions of WAR
+  	 */
+  	public static void main(String[] args) {
+  		if(! (args.length > 0) ) {
+  			System.err.println("Missing argument");
+  			System.exit(1);
+  		}
+  		
+  		switch(args[0]) {
+  		case "database":
+  			try {
+  				Connection connection = DB.getDbConnection(null);
+  				try (PreparedStatement stmt = connection.prepareStatement("SELECT COUNT(*) FROM tasks") ) {
+  					//do nothing
+  				}
+  			}
+  			catch(DBException dbe) {
+  				dbe.printStackTrace();
+  			}
+  			catch(SQLException sqe) {
+  				sqe.printStackTrace();
+  			}
   			
+  			break;
+  		
+  		default:
+  			System.err.println("Function " + args[0] + " not implemented");
+  			System.exit(1);
+  		}
+  	}
+  	
+  	
+	/**
+  	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+  	 */
+  	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+  		//TODO: copy getPost() when done editing
+  		doGet(request, response);
+  	}
+  	
+
   	/**
   	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
   	 */
@@ -50,10 +94,10 @@ public class ServletHandler extends HttpServlet {
   		response.setContentType("text/html");
   		
  		/**
- 		 * Make sure everything is good before proceeding
+ 		 * Make sure everything is good before proceeding or throw an exception
  		 */
  		if(! isRequestValid(request, response) ) {
- 			return;
+ 			throw new ServletException("Invalid request sent to " + request.getServletPath());
  		}
  		
  		
@@ -79,10 +123,10 @@ public class ServletHandler extends HttpServlet {
 				//handle methods with a string parameter
 				if(paramType.equals("String")) {					
 					String param1 = params.get("param1")[0];
-					
+
 					responseData=method.invoke(projectClass, param1);					
 				}
-				
+
 				// this is a bad idea to just attempt to convert a string to an integer
 				// even when catching NumberFormatException but we use it here to simply
 				// the code base since this portion of the code is not reviewed in the project
@@ -120,6 +164,7 @@ public class ServletHandler extends HttpServlet {
   			//send successful response
   			PrintWriter out = response.getWriter();
   			out.println(responseContent);
+  			return;
   		}
   		
   		/**
@@ -156,14 +201,6 @@ public class ServletHandler extends HttpServlet {
 
   	}
 
-	/**
-  	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-  	 */
-  	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-  		//TODO: copy getPost() when done editing
-  		doGet(request, response);
-  	}
-
   	
   	/**
   	 * 
@@ -186,8 +223,7 @@ public class ServletHandler extends HttpServlet {
   			return true;
   		}
   		catch(AppException ae) {
-  			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-  			ServletUtilities.sendError(response, ae.getMessage());
+  			AppLogger.log("parseParams caught exception: " + ae.getPrivateMessage());
   			return false;
   		}
   	}
@@ -256,7 +292,7 @@ public class ServletHandler extends HttpServlet {
         		method = requestClass.getDeclaredMethod(task, classTypes[i]);
         		
         		AppLogger.log("Used getProjectMethod() to discover task: " + task + " with param type: " + classTypes[i].getCanonicalName());
-        		paramType = classTypes[i].getSimpleName();
+        		this.paramType = classTypes[i].getSimpleName();
                         
         		return(method);
         	}
