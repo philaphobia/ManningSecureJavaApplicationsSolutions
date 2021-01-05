@@ -41,6 +41,12 @@ public class SignedJwtTokenStore implements TokenStore {
     		
         	//set the verifier
         	verifier = new MACVerifier(secret);
+        	
+        	//set the algorithm to HMAC SHA256
+        	this.algorithm = JWSAlgorithm.HS256;
+        	
+        	//set the audience
+        	this.audience = audience;
     	}
     	catch(KeyLengthException kle) {
     		throw new AppException("SignedJwtTokenStore received key with wrong length: " + kle.getMessage(), "application error");
@@ -50,11 +56,7 @@ public class SignedJwtTokenStore implements TokenStore {
     	}
 
 
-    	//set the algorithm to HMAC SHA256
-    	this.algorithm = JWSAlgorithm.HS256;
-    	
-    	//set the audience
-    	this.audience = audience;
+
     }
  
     @Override

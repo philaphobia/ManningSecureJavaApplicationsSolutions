@@ -11,6 +11,8 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.json.Json;
+import javax.json.JsonObject;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -33,10 +35,6 @@ import com.johnsonautoparts.logger.AppLogger;
  */
 public class ServletHandler extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-  	private String project=null;
-  	private String task=null;
-  	private String paramType=null;
-  	private Map<String,String[]> params;
 
   	/**
   	 * @see HttpServlet#HttpServlet()
@@ -86,11 +84,14 @@ public class ServletHandler extends HttpServlet {
   		AppLogger.log("Processing POST request");
   		
   		//set the default response and content-type
-  		String responseContent="<html><body>All Good</body></html>";
-  		response.setContentType("text/html");
+ 		JsonObject jsonOk = Json.createObjectBuilder()
+					.add("status", "ok")
+					.build();
+		String responseContent = jsonOk.toString();
+  		response.setContentType("application/json");
 
   		
-  		// check if the task param was sent
+  		// check if the task param1 was sent
   		String action=null;
   		if(request.getParameter("action") == null || request.getParameter("action").isEmpty()) {
   			action="";
@@ -99,6 +100,7 @@ public class ServletHandler extends HttpServlet {
   			action = request.getParameter("action");
   		}
 
+  		//check the action
   		switch(action) {
   		case "login":
   			try {
@@ -106,6 +108,10 @@ public class ServletHandler extends HttpServlet {
 
   				Connection connection = getConnection(request);
   				Project4 project4 = new Project4(connection, request, response);
+  				
+  				//call login
+  				boolean loginResponse = project4.login(loginParams.get("username"), loginParams.get("password"), loginParams.get("secure_form"));
+  				responseContent = Boolean.toString(loginResponse);
   			}
   			catch(AppException ae) {
   	  			AppLogger.log("POST caught AppException: " + ae.getPrivateMessage());
@@ -140,47 +146,44 @@ public class ServletHandler extends HttpServlet {
  		AppLogger.log("Processing GET request");
 
   		//set the default response and content-type
-  		String responseContent="<html><body>All Good</body></html>";
-  		response.setContentType("text/html");
+ 		JsonObject jsonOk = Json.createObjectBuilder()
+ 					.add("status", "ok")
+ 					.build();
+ 		String responseContent = jsonOk.toString();
+  		response.setContentType("application/json");
   		
- 		/**
- 		 * Make sure everything is good before proceeding or throw an exception
- 		 */
- 		if(! isRequestValid(request) ) {
- 			throw new ServletException("Invalid request sent to " + request.getServletPath());
- 		}
- 		
- 		
  		//main logic to parse action
   		try {
+  			//check and load the params map from sent parameters
+  			Map<String,String> params = parseParams(request);
+ 		
+  			//assign the project variable
+  			String project = params.get("project");
+  			
   			//minimize code by using reflection to discover classes and methods
 			Project projectClass = getProjectClass(project, getConnection(request), request, response);
-			Method method = getProjectMethod(projectClass.getClass());
-			//ProjectCaller projectCaller = getProjectCaller(project, connection, request);
+			Method method = getProjectMethod(projectClass.getClass(), params);
+
 
 			try {
-				String[] paramStr=params.get("param1");
-				if( (paramStr==null) || (paramStr[0]==null) || (paramStr[0].trim().isEmpty())) {
-					throw new AppException("param 1 is empty", "param1 incorrect");
-				}
-					
+				String paramVal = params.get("param_value");
+				String paramType = params.get("param_type");
+				
 				//String for the content
 				Object responseData=null;
 				
 				//handle methods with a string parameter
 				if(paramType.equals("String")) {					
-					String param1 = params.get("param1")[0];
-
-					responseData=method.invoke(projectClass, param1);					
+					responseData=method.invoke(projectClass, paramVal);					
 				}
 
 				// this is a bad idea to just attempt to convert a string to an integer
 				// even when catching NumberFormatException but we use it here to simply
 				// the code base since this portion of the code is not reviewed in the project
 				else if(paramType.equals("Integer")) {
-					int param1 = Integer.parseInt(params.get("param1")[0]);
+					int paramInt = Integer.parseInt(paramVal);
 										
-					responseData=method.invoke(projectClass, param1);
+					responseData=method.invoke(projectClass, paramInt);
 				}
 				
 				else {
@@ -191,12 +194,23 @@ public class ServletHandler extends HttpServlet {
 				
 				//update the responseData
 				if(response.getContentType() != null) {
-					if(response.getContentType().contains("html") ) {
-						responseContent = "<html><body>" + responseData + "</body></html>";
+					//check for JSON object returned
+					if(responseData != null && responseData instanceof JsonObject) {
+						responseContent = responseData.toString();
 					}
+					//look for XML data
 					else if(response.getContentType().contains("xml")) {
 						responseContent = responseData.toString();
 					}
+					//return default json data
+					else {
+				 		JsonObject jsonContent = Json.createObjectBuilder()
+			 					.add("status", "ok")
+			 					.add("message", responseData.toString())
+			 					.build();
+				 		responseContent = jsonContent.toString();
+					}
+
 					//all other responses use the default message
 				}
 
@@ -205,6 +219,7 @@ public class ServletHandler extends HttpServlet {
 				throw new AppException("caught NumFormatException: " + nfe.getMessage(), "application error");
 			}
 			catch(IllegalAccessException | IllegalArgumentException | InvocationTargetException iiie) {
+				iiie.printStackTrace();
 				throw new AppException("caught illegal exception: " + iiie.getMessage(), "application error");
 			}
   			
@@ -233,26 +248,6 @@ public class ServletHandler extends HttpServlet {
   	 * NOTHING BELOW THIS POINT NEEDS TO BE EDITED FOR THE liveProject
   	 *
   	 */
-  
-  	/**
-  	 * Check the request to make sure everything is valid including parameters
-  	 * 
-  	 * @param request
-  	 * @param response
-  	 * @return boolean if no errors were detected
-  	 */
-  	public boolean isRequestValid(HttpServletRequest request) {
- 
- 		//parse params
-  		try {
-  			parseParams(request);
-  			return true;
-  		}
-  		catch(AppException ae) {
-  			AppLogger.log("parseParams caught exception: " + ae.getPrivateMessage());
-  			return false;
-  		}
-  	}
   	
   	
   	/**
@@ -261,40 +256,53 @@ public class ServletHandler extends HttpServlet {
   	 * @param request
   	 * @param response
   	 */
-  	private void parseParams(HttpServletRequest request) throws AppException {
- 		params = request.getParameterMap(); 
-
+  	private Map<String,String> parseParams(HttpServletRequest request) throws AppException {
+  		Map<String,String[]> paramsMap = request.getParameterMap(); 
+  		Map<String,String> params = new HashMap<>(); //map to return
+  		
   		// return an error if the Map is null or empty
-  		if(params == null || params.isEmpty()) {
+  		if(paramsMap == null || paramsMap.isEmpty()) {
   			throw new AppException("no params sent", "missing request parameters");
   		}
   		
   		
   		/**
   		 * 
-  		 * check if the action param was sent
+  		 * check if the project param was sent
   		 * 
   		 * SpotBugs tags this get() request as a possible flaw since it did not see the
   		 * The params Map is populated above with request.getParameterMap()
   		 */
-  		
-  		if(params.get("project") == null) {
+  		if(paramsMap.get("project") == null) {
   			throw new AppException("project param not sent", "missing request parameters");
   		}
   		else {
   			// avoid parameter overloading attack and only select the first item in the array
-  			this.project = params.get("project")[0];
+  			//this.project = params.get("project")[0];
+  			params.put("project", paramsMap.get("project")[0]);
   		}
 
   		// check if the task param was sent
-  		if(params.get("task") == null) {
+  		if(paramsMap.get("task") == null) {
   			throw new AppException("task param not sent", "missing request parameters");
   		}
   		else {
   			// avoid parameter overloading attack and only select the first item in the array
-  			this.task = params.get("task")[0];
+  			//this.task = params.get("task")[0];
+  			params.put("task", paramsMap.get("task")[0]);
   		}
   		
+  		// check if the param1 was sent
+  		if(paramsMap.get("param1") == null) {
+  			throw new AppException("param1 not sent", "missing request parameters");
+  		}
+  		else {
+  			// avoid parameter overloading attack and only select the first item in the array
+  			//this.task = params.get("task")[0];
+  			params.put("param_value", paramsMap.get("param1")[0]);
+  		}
+  		
+  		return(params);
   	}//end parseParams
 
 
@@ -305,40 +313,40 @@ public class ServletHandler extends HttpServlet {
   	 * @param response
   	 */
   	private Map<String,String> parseLoginParams(HttpServletRequest request) throws AppException {
- 		params = request.getParameterMap(); 
+ 		Map<String,String[]> paramsMap = request.getParameterMap(); 
 
  		Map<String,String> loginParams = new HashMap<>();
  		
   		// return an error if the Map is null or empty
-  		if(params == null || params.isEmpty()) {
+  		if(paramsMap == null || paramsMap.isEmpty()) {
   			throw new AppException("no params sent", "missing request parameters");
   		}
 
   		//username
-  		if(params.get("username") == null) {
+  		if(paramsMap.get("username") == null) {
   			throw new AppException("username param not sent", "missing request parameters");
   		}
   		else {
   			// avoid parameter overloading attack and only select the first item in the array
-  			loginParams.put("username", params.get("username")[0]);
+  			loginParams.put("username", paramsMap.get("username")[0]);
   		}
 
   		//password
-  		if(params.get("password") == null) {
+  		if(paramsMap.get("password") == null) {
   			throw new AppException("password param not sent", "missing request parameters");
   		}
   		else {
   			// avoid parameter overloading attack and only select the first item in the array
-  			loginParams.put("password", params.get("password")[0]);
+  			loginParams.put("password", paramsMap.get("password")[0]);
   		}
   		
   		//secure_form flag
-  		if(params.get("secure_form") == null) {
+  		if(paramsMap.get("secure_form") == null) {
   			throw new AppException("secure_form param not sent", "missing request parameters");
   		}
   		else {
   			// avoid parameter overloading attack and only select the first item in the array
-  			loginParams.put("secure_form", params.get("secure_form")[0]);
+  			loginParams.put("secure_form", paramsMap.get("secure_form")[0]);
   		}
   		
   		return loginParams;
@@ -356,16 +364,18 @@ public class ServletHandler extends HttpServlet {
   	 * @return Method discovered based on the string of the task name and a valid method which doesn't cause an Exception
   	 * @throws AppException
   	 */
-    private Method getProjectMethod(Class<?> requestClass) throws AppException {
+    private Method getProjectMethod(Class<?> requestClass, Map<String,String> params) throws AppException {
         Method method=null;
         Class<?>[] classTypes = {Integer.class, String.class};
 
+        String task = params.get("task");
+        
         for(int i=0; i < classTypes.length; i++ ) {
         	try {
         		method = requestClass.getDeclaredMethod(task, classTypes[i]);
         		
         		AppLogger.log("Used getProjectMethod() to discover task: " + task + " with param type: " + classTypes[i].getCanonicalName());
-        		this.paramType = classTypes[i].getSimpleName();
+        		params.put("param_type", classTypes[i].getSimpleName());
                         
         		return(method);
         	}
