@@ -33,8 +33,6 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 import com.johnsonautoparts.exception.AppException;
 import com.johnsonautoparts.logger.AppLogger;
-import com.johnsonautoparts.servlet.ServletUtilities;
-
 
 
 /**
@@ -52,9 +50,7 @@ import com.johnsonautoparts.servlet.ServletUtilities;
  * 
  */
 public class Project4 extends Project {
-	private static final String REFERER_COMMENTS = "comments.jsp";
-	
-	
+
 	public Project4(Connection connection, HttpServletRequest httpRequest, HttpServletResponse httpResponse) {
 		super(connection, httpRequest, httpResponse);
 	}
@@ -66,8 +62,7 @@ public class Project4 extends Project {
 	 * TITLE: Do not trust hidden forms
 	 * 
 	 * RISK: While hidden forms are not displayed in the web browser, they can still be manipulated by
-	 *       the user and forged. Trusting data from hidden fields to make security decisions is not
-	 *       allowed.
+	 *       the user and forged. Hidden forms should be sanitized just like all other data.
 	 * 
 	 * REF: CMU Software Engineering Institute IDS14-J
 	 * 
@@ -76,18 +71,20 @@ public class Project4 extends Project {
 	 * @param secureForm
 	 * @return boolean
 	 */
-	public boolean login(String username, String password, String secureForm) throws AppException {
-		//validate secureForm is boolean
-		if(! Boolean.parseBoolean(secureForm)) {
-			throw new AppException("Login did not originate from secure form", "application error");
-		}
-		
+	public String login(String username, String password, String secureForm) throws AppException {		
 		//Project2 object for xPath login
 		Project2 project2 = new Project2(connection, httpRequest, httpResponse);
 		String userPass = username + ":" + password;
 		
 		//process login
-		return project2.xpathLogin(userPass);
+		boolean loginSuccess = project2.xpathLogin(userPass);
+		
+		if(loginSuccess) {
+			return(secureForm);
+		}
+		else {
+			return(secureForm + " unsuccessful");
+		}
 	}
 	
 	
@@ -126,7 +123,7 @@ public class Project4 extends Project {
 	 * CODE: https://www.tutorialspoint.com/servlets/servlets-file-uploading.htm
 	 * 
 	 */
-	public void fileUpload(String str) throws AppException {
+	public boolean fileUpload(int numFiles) throws AppException {
 		final String[] ACCEPTED_CONTENT = {"application/pdf"};
 		DiskFileItemFactory factory = new DiskFileItemFactory();
 		   
@@ -171,8 +168,10 @@ public class Project4 extends Project {
                 }
                 
                 fi.write( file );
-
-            }
+            }//end while to process FileItems
+            
+            //all files uploaded successfully
+            return(true);
 		}
 		catch(FileUploadException fue) {
             throw new AppException("Upload exception: " + fue.getMessage(), "Application error");
@@ -216,13 +215,15 @@ public class Project4 extends Project {
 			}
 		}
 		catch(IllegalStateException ise) {
-			//write the printstack to a string for better debugging
+			//convert the printstack to a string for better debugging
 			StringWriter sw = new StringWriter();
 			PrintWriter pw = new PrintWriter(sw);
-			ise.printStackTrace(pw);
-			String error = sw.toString();
 			
-			return(error);
+			//call printStackTrace to the print/string
+			ise.printStackTrace(pw);
+
+			//return the error as the content
+			return(sw.toString());
 		}
 
 	}
@@ -238,15 +239,55 @@ public class Project4 extends Project {
 	 *       to avoid tricky malicious users from bypassing the expected controls.
 	 * 
 	 * REF: OWASP XSS Cheat Sheet Rule #6
+	 *      https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html
 	 * 
-	 * IMPORTANT: For the following task you will be working on a JSP form at:
+	 * IMPORTANT: For the following task you will be working on a JSP form at and the current method:
 	 *            WebContent/jsp/blog.jsp
 	 *            
-	 *            The sanitization is applicable in Java as well if you are returning data which needs to
-	 *            be encoded.
+	 *            Since blog.jsp is taking a parameter and displaying it to the user, the data must be
+	 *            sanitized. The data is then sent to this method and should be sanitized again before
+	 *            putting it into the database.
+	 *            
+	 *            For the JSP, imagine the user sent the following as the blog parameter:
+	 *            close the real text area</textarea><script>alert('XSS from closed TextArea');</script><textarea>new text
+	 *            
+	 *            Notice how the textarea tag is closed, then JavaScript is entered, and the textarea
+	 *            is then closed. This creates a valid HTML with two textareas and JavaScript tags in
+	 *            the middle which executes in the target users browser.
+	 *            
 	 */
-	public String postBlog(String blog) {
-		return("Blog entry accepted");
+	public String postBlog(String blogEntry) throws AppException {
+		try {
+			String sql = "INSERT INTO blog(blog) VALUES (?)";
+			
+			try (PreparedStatement stmt = connection.prepareStatement(sql) ) {
+				stmt.setString(1, blogEntry);
+				
+				//execute the insert
+				int rows = stmt.executeUpdate();
+				
+				//verify the insert worked based on the number of rows returned
+				if(rows > 0) {
+					return("Blog entry accepted");
+				}
+				else {
+					throw new AppException("postBlog() did not insert to table correctly", "application error");
+				}
+			}
+	   
+		} catch (SQLException se) {
+			throw new AppException("postBlog() caught SQLException: " + se.getMessage(), "application error");
+		} 
+		finally {
+			try {
+				if(connection != null) {
+					connection.close();
+				}
+			} 
+			catch (SQLException se) {
+				AppLogger.log("postBlog() failed to close connection: " + se.getMessage());
+			}
+		}
 	}
 
 	
@@ -300,12 +341,23 @@ public class Project4 extends Project {
 	 *       Since the header is untrusted, it should not be used as a reference source for making
 	 *       security decisions.
 	 * 
+	 * NOTES: In a previous milestone you added security controls to filter the data in the comments.jsp
+	 *        form so no further changes are required in the JSP.
+	 *        
+	 *        Develop a different security control than the header here (such as a CSRF token). 
+	 *        
+	 *        You will also want to duplicate filtering on the data from the form here before it is entered 
+	 *        into the database.  Event though the data was filtered before displaying in the form, a 
+	 *        malicious user could still change it before re-submitting to this method.
+	 *        
 	 * REF: SonarSource RSPEC-2089
 	 * 
 	 * @param comments
 	 * @return int
 	 */
-	public int comments(String comments) throws AppException {
+	public String postComments(String comments) throws AppException {
+		final String REFERER_COMMENTS = "comments.jsp";
+		
 		String referer = httpRequest.getHeader("referer");
 		if(referer == null) {
 			throw new AppException("commets() cannot retrieve referer header", "application error");
@@ -323,11 +375,19 @@ public class Project4 extends Project {
 				stmt.setString(1, comments);
 				
 				//execute the insert and return the number of rows
-				return stmt.executeUpdate();
+				int rows = stmt.executeUpdate();
+				
+				//verify the insert worked based on the number of rows returned
+				if(rows > 0) {
+					return("Comments accepted");
+				}
+				else {
+					throw new AppException("postComments() did not insert to table correctly", "application error");
+				}
 			}
 	   
 		} catch (SQLException se) {
-			throw new AppException("comments caught SQLException: " + se.getMessage(), "application error");
+			throw new AppException("postComments() caught SQLException: " + se.getMessage(), "application error");
 		} 
 		finally {
 			try {
@@ -336,7 +396,7 @@ public class Project4 extends Project {
 				}
 			} 
 			catch (SQLException se) {
-				AppLogger.log("comments failed to close connection: " + se.getMessage());
+				AppLogger.log("postComments() failed to close connection: " + se.getMessage());
 			}
 		}
 	}
