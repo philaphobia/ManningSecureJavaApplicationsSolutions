@@ -738,7 +738,11 @@ public class Project2 extends Project {
 		 */
 		//SOLUTION END
 		
-		final String xsdPath = "resources/schema.xsd";
+		StringBuilder xsdPath = new StringBuilder();
+		xsdPath.append(System.getProperty( "catalina.base" ) + File.separator);
+		xsdPath.append("webapps" + File.separator + 
+				httpRequest.getServletContext().getContextPath() + File.separator);
+		xsdPath.append("resources/schema.xsd");
 		
 		//the code for this XML parse is very rudimentary but is here for demonstration
 		//purposes to work with XML schema validation
@@ -759,7 +763,7 @@ public class Project2 extends Project {
 			 */
 
 			SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-			Schema schema = factory.newSchema(new File(xsdPath));
+			Schema schema = factory.newSchema(new File(xsdPath.toString()));
 			Validator validator = schema.newValidator();
 	            
 			InputSource is = new InputSource(new String(xml));
@@ -864,7 +868,8 @@ public class Project2 extends Project {
 		//create a path to the webapp
 		StringBuilder webappPath = new StringBuilder();
 		webappPath.append(System.getProperty( "catalina.base" ));
-		webappPath.append(File.separator + "webapps" + File.separator + "SecureCoding" + File.separator);
+		webappPath.append(File.separator + "webapps" + File.separator + 
+				httpRequest.getServletContext().getContextPath() + File.separator);
 		
 		//make sure the string is not null
 		if(userPass == null) {
