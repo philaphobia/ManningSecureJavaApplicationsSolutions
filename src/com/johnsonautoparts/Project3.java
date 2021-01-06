@@ -95,11 +95,11 @@ public class Project3 extends Project {
 			 * ioe.printStackTrace();
 			 * AppLogger.log("login IO error: " + ioe.getMessage());
 			 */
-			throw new AppException("login caused IO exception: " + ioe.getMessage(), "application error");
+			throw new AppException("login caused IO exception: " + ioe.getMessage());
 			//SOLUTION END
 		}
 		catch(ServletException se) {
-			throw new AppException("login exception: " + se.getMessage(), "application error");
+			throw new AppException("login exception: " + se.getMessage());
 		}
 		
 		/**
@@ -150,7 +150,7 @@ public class Project3 extends Project {
 				 *
 				 * return("Error reading file: " + ex.getMessage());
 				 */
-				throw new AppException("Error reading file: " + ex.getMessage(), "application error");
+				throw new AppException("Error reading file: " + ex.getMessage());
 				//SOLUTION END
 			}
 		}
@@ -162,7 +162,7 @@ public class Project3 extends Project {
 			 *
 			 * return("Error with requested file: " + ipe.getMessage());
 			 */
-			throw new AppException("Error with requested file: " + ipe.getMessage(), "application error");
+			throw new AppException("Error with requested file: " + ipe.getMessage());
 		}
 		
 	}
@@ -224,7 +224,7 @@ public class Project3 extends Project {
 			 *
 			 * System.err.println("getSession() caused IllegalState: " + se.getMessage());
 			 */
-			throw new AppException("exceptionLogging caught illegal state: " + se.getMessage(), "application error");
+			throw new AppException("exceptionLogging caught illegal state: " + se.getMessage());
 			//SOLUTION END
 		}
 		
@@ -268,11 +268,8 @@ public class Project3 extends Project {
 		int accessed=0;
 		
 		//update if it existing or leave as zero
-		if(accessedObj != null) {
-			//no objects accessed yet
-			if(accessedObj instanceof Integer) {
-				accessed = (Integer)accessedObj;
-			}
+		if(accessedObj instanceof Integer) {
+			accessed = (Integer)accessedObj;
 		}
 		
 		/*
@@ -304,7 +301,7 @@ public class Project3 extends Project {
 					id = Integer.parseInt(pdfId);
 				}
 				catch(NumberFormatException nfe) {
-					throw new AppException("restoreState failed to parse integer: " + nfe.getMessage(), "application error");
+					throw new AppException("restoreState failed to parse integer: " + nfe.getMessage());
 				}
 			
 				//set the parameter and execute the SQL
@@ -324,7 +321,7 @@ public class Project3 extends Project {
 						 */
 						String returnStr = rs.getString(1);
 						if(returnStr == null) {
-							throw new AppException("restoreState received null response from db", "application error");
+							throw new AppException("restoreState received null response from db");
 						}
 						
 						/**
@@ -337,14 +334,14 @@ public class Project3 extends Project {
 						//SOLLUTION END
 					}
 					else {
-						throw new AppException("restoreState did not return any results", "application error");
+						throw new AppException("restoreState did not return any results");
 					}
 				}//end resultset
 			}//end statement
 	   
 		} 
 		catch (SQLException se) {
-			throw new AppException("restoreState caught SQLException: " + se.getMessage(), "application error");
+			throw new AppException("restoreState caught SQLException: " + se.getMessage());
 		} 
 		finally {
 			try {
@@ -398,7 +395,7 @@ public class Project3 extends Project {
 			return true;
 		}
 		catch(IOException ioe) {
-			throw new AppException("flowHandling caught IO exception: " + ioe.getMessage(), "application error");
+			throw new AppException("flowHandling caught IO exception: " + ioe.getMessage());
 		}
 		finally {
 			/*
@@ -513,18 +510,18 @@ public class Project3 extends Project {
 			 *           
 			 * throw new Exception("exec caught IO error: " + ioe.getMessage());
 			 */
-			throw new AppException("exec caught IO error: " + ioe.getMessage(), "application error");
+			throw new AppException("exec caught IO error: " + ioe.getMessage());
 			//SOLUTION END
 		}
 		catch(InterruptedException ie) {
 			/**
-			 * SOLUTION: Same error as aboe throwing Exception.
+			 * SOLUTION: Same error as above throwing Exception.
 			 * 
 			 *           The following line is commented out and replaced:
 			 *
 			 * throw new Exception("exec caught interupted error: " + ie.getMessage());
 			 */
-			throw new AppException("exec caught interrupted error: " + ie.getMessage(), "applicaiton error");
+			throw new AppException("exec caught interrupted error: " + ie.getMessage());
 			//SOLUTION END
 		}
 	}
@@ -565,7 +562,7 @@ public class Project3 extends Project {
 			 *           The str parameter should be tested for null before using the isEmpty() method
 			 */
 			if(str == null) {
-				throw new AppException("testNull was passed a null variable", "application error");
+				throw new AppException("testNull was passed a null variable");
 			}
 			//SOLUTION END
 			//check if str is empty
@@ -602,7 +599,7 @@ public class Project3 extends Project {
 	 */
 	public String deleteFile(String fileName) throws AppException {
 		if(fileName == null) {
-			throw new AppException("deleteFile passed a null variable", "application error");
+			throw new AppException("deleteFile passed a null variable");
 		}
 		
 		/**
@@ -638,7 +635,7 @@ public class Project3 extends Project {
 			return("Deleted file: " + f.getCanonicalPath());
 		} 
 		catch (IOException ioe) {
-			throw new AppException("deleteFile caught IO exception: " + ioe.getMessage(), "application error");
+			throw new AppException("deleteFile caught IO exception: " + ioe.getMessage());
 		}
 	}
 	
@@ -672,7 +669,7 @@ public class Project3 extends Project {
 		 */
 		if(str == null || str.isEmpty() ) {
 		//SOLUTION END
-			throw new AppException("manipulate string sent null or empty", "application error");
+			throw new AppException("manipulate string sent null or empty");
 		}
 		
 		String manipulated = str.toUpperCase(Locale.ENGLISH);
@@ -714,7 +711,7 @@ public class Project3 extends Project {
 			 * fix.read(data, 0, BUFFER) == 0) {
 			 */
 			if(fis.read(data, 0, BUFFER) == 0) {
-				throw new AppException("detectFileError read zero bytes","application error");
+				throw new AppException("detectFileError read zero bytes");
 			}
 			//SOLUTION END
 			
@@ -724,10 +721,10 @@ public class Project3 extends Project {
 			return Arrays.toString(data);
 		}
 		catch(FileNotFoundException fnfe) {
-			throw new AppException("detectFileError could not find file: " + fnfe.getMessage(), "application error");
+			throw new AppException("detectFileError could not find file: " + fnfe.getMessage());
 		}
 		catch(IOException ioe) {
-			throw new AppException("detectFileError caught IO exception: " + ioe.getMessage(), "application error");
+			throw new AppException("detectFileError caught IO exception: " + ioe.getMessage());
 		}
 	}
 	
@@ -777,7 +774,7 @@ public class Project3 extends Project {
 			t=null;
 			System.gc(); //does not guarantee GC but only option
 			AppLogger.log("recoverState exhausting resources and garbage collection attempted");
-			throw new AppException("recoverState exahusted resources", "application error");
+			throw new AppException("recoverState exahusted resources");
 		}
 		//SOLUTION END
 	}
@@ -797,18 +794,20 @@ public class Project3 extends Project {
 			this.session=session;
 		}
 		
-		public void start() {
+		@Override
+		public synchronized void start() {
 			worker = new Thread(this);
 			worker.start();
 		}
 		
+		@Override
 		public void run() {
 			try {
 				//loop until we see the data_id attribute in the session
 				while(! found) {
 					dataId = session.getAttribute("data_id");
 				
-					if(dataId != null && dataId instanceof String) {
+					if(dataId instanceof String) {
 						found=true;
 					}
 					else {
@@ -940,7 +939,7 @@ public class Project3 extends Project {
 			//SOLUTION END
 		}
 		catch (FileNotFoundException fnfe) {
-			throw new AppException("zip file not found: " + fnfe.getMessage(), "application error");
+			throw new AppException("zip file not found: " + fnfe.getMessage());
 		}
 		/**
 		 * SOLUTION: No longer need these closes, so code is commented out

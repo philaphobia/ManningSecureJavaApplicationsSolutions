@@ -24,13 +24,13 @@ public class SignedJwtTokenStore implements TokenStore {
     	
     	//check is session is null
     	if(session == null) {
-    		throw new AppException("SignedJwtTokenStore has null session", "application error");
+    		throw new AppException("SignedJwtTokenStore has null session");
     	}
     	
     	//check for secret in session
     	Object secretObj = session.getAttribute("secret");
-    	if( (secretObj == null) || !(secretObj instanceof byte[]) ) {
-    		throw new AppException("SignedJwtTokenStore cannot find secret in session", "application error");
+    	if(secretObj instanceof byte[]) {
+    		throw new AppException("SignedJwtTokenStore cannot find secret in session");
     	}
     	
 
@@ -49,10 +49,10 @@ public class SignedJwtTokenStore implements TokenStore {
         	this.audience = audience;
     	}
     	catch(KeyLengthException kle) {
-    		throw new AppException("SignedJwtTokenStore received key with wrong length: " + kle.getMessage(), "application error");
+    		throw new AppException("SignedJwtTokenStore received key with wrong length: " + kle.getMessage());
     	}
     	catch(JOSEException je) {
-    		throw new AppException("SignedJwtTokenStore caught JOSEException: " + je.getMessage(), "application error");
+    		throw new AppException("SignedJwtTokenStore caught JOSEException: " + je.getMessage());
     	}
 
 
@@ -74,7 +74,7 @@ public class SignedJwtTokenStore implements TokenStore {
             return jwt.serialize();
         } 
         catch (JOSEException e) {
-            throw new AppException(e);
+            throw new AppException(e.getMessage());
         }
     }
     
@@ -88,7 +88,7 @@ public class SignedJwtTokenStore implements TokenStore {
 			return new Token(Instant.ofEpochSecond(expireDate.getTime()), username);
 		} 
 		catch (IllegalArgumentException iae) {
-			throw new AppException("createToken() caught IllegalArgumentException: " + iae.getMessage(), "application error");
+			throw new AppException("createToken() caught IllegalArgumentException: " + iae.getMessage());
 		}
 	}
 

@@ -4,7 +4,6 @@ import java.io.*;
 
 import javax.servlet.http.HttpServletResponse;
 
-import com.johnsonautoparts.exception.AppException;
 import com.johnsonautoparts.logger.AppLogger;
 
 /**

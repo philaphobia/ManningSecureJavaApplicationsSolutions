@@ -102,7 +102,7 @@ public class Project1 extends Project {
 		 *           The format pattern to rend the untrusted content as a string
 		 */
 		//return String.format(str + " passed on date %t", cal);
-		return String.format("%s passed on date %t", str, cal);
+		return String.format("%s passed on date %tF", str, cal);
 	}
 	
 	
@@ -230,7 +230,7 @@ public class Project1 extends Project {
 		//check for a script tag
 		//if (str.toLowerCase().contains("script")) {
 		if (str.toLowerCase(Locale.ENGLISH).contains("script")) {
-		    throw new AppException("internationalization() found script tag", "application error");
+		    throw new AppException("internationalization() found script tag");
 		}
 	
 		//get the operating system
@@ -258,8 +258,7 @@ public class Project1 extends Project {
 			return true;
 		}
 		catch (IOException ioe) {
-			throw new AppException("IOException in internationaliation(): " + ioe.getMessage(), 
-					"application error");
+			throw new AppException("IOException in internationaliation(): " + ioe.getMessage());
 		}
 	}
 	
@@ -414,7 +413,7 @@ public class Project1 extends Project {
 			// SOLUTION END
 		}
 		catch(IOException ioe) {
-			throw new AppException("Caught exception reading file: " + ioe.getMessage(), "application error");
+			throw new AppException("Caught exception reading file: " + ioe.getMessage());
 		}
 		
 		return readStr;
@@ -554,7 +553,7 @@ public class Project1 extends Project {
 			}
 		} 
 		catch (IOException ioe) {
-			throw new AppException("fileEncoding caused exception: " + ioe.getMessage(), "Application error");
+			throw new AppException("fileEncoding caused exception: " + ioe.getMessage());
 		} 
 	}
 
@@ -602,7 +601,7 @@ public class Project1 extends Project {
 			}
 		}
 		catch(ArithmeticException ae) {
-			throw new AppException("calcTotalValue caught ArithmeticException: " + ae.getMessage(), "application error");
+			throw new AppException("calcTotalValue caught ArithmeticException: " + ae.getMessage());
 		}
 		//SOLUTION END
 
@@ -634,7 +633,7 @@ public class Project1 extends Project {
 		 *            The solution also requires adding a throw to the method if zero is detected
 		 */
 		if(monthlyTasks == 0) {
-			throw new AppException("monthlyTasks caught exception with zero passed", "application error");
+			throw new AppException("monthlyTasks caught exception with zero passed");
 		}
 		//SOLUTION END
 		
@@ -690,7 +689,7 @@ public class Project1 extends Project {
 	    	}
 	    }
 	    catch(NumberFormatException nfe) {
-	    	throw new AppException("comparisonTask caught number exception from user input: " + nfe.getMessage(), "application error");
+	    	throw new AppException("comparisonTask caught number exception from user input: " + nfe.getMessage());
 	    }
 	}
 	
@@ -782,7 +781,7 @@ public class Project1 extends Project {
 			return number.nextInt(range);
 		}
 		catch(NoSuchAlgorithmException nsae) {
-			throw new AppException("randomNumGenerate caught NoSuchAlgorithException: " + nsae.getMessage(), "application error");
+			throw new AppException("randomNumGenerate caught NoSuchAlgorithException: " + nsae.getMessage());
 		}
 		// SOLUTION END
 	}
