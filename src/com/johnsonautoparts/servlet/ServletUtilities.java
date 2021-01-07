@@ -1,7 +1,10 @@
 package com.johnsonautoparts.servlet;
 
 import java.io.*;
+import java.security.SecureRandom;
 
+import javax.json.Json;
+import javax.json.JsonObject;
 import javax.servlet.http.HttpServletResponse;
 
 import com.johnsonautoparts.logger.AppLogger;
@@ -13,6 +16,14 @@ import com.johnsonautoparts.logger.AppLogger;
  * 
  */
 public class ServletUtilities {
+
+  /**
+   * Utility class so create private constructor to throw error if the class is instantiated
+   */
+  private ServletUtilities() {
+	  throw new IllegalStateException("Utility class not for instantiaton");
+  }
+	  
   /**
    * Add headers for protection based on information from OWASP.
    *
@@ -42,11 +53,15 @@ public class ServletUtilities {
 	  PrintWriter out=null;
 
 	  try {
-		  response.setContentType("text/html");
+		  response.setContentType("application/json");
 		  out = response.getWriter();
 
 		  if(out != null) {
-			  out.println("<html><head><body>" + errorMsg + "</body></html>");
+			  JsonObject json = Json.createObjectBuilder()
+						.add("status", "error")
+						.add("message", errorMsg)
+					.build();
+			  out.println(json);
 		  }
 	  }
 	  catch(Exception e) {
@@ -59,5 +74,16 @@ public class ServletUtilities {
 	  }
   }
   
+  
+  /**
+   * Create a session key from random
+   */
+  public static byte[] createSecret() {
+	  SecureRandom random = new SecureRandom();
+	  byte[] sharedSecret = new byte[32];
+	  random.nextBytes(sharedSecret);
+	  
+	  return sharedSecret;
+  }
 
 }

@@ -23,8 +23,9 @@
 				<td><input type="text" name="email" /></td>
 			</tr>
 		</table>
-		<input type="hidden" name="action" value="login"/>
+		<input type="hidden" name="action" value="xml_login"/>
 		<input type="hidden" name="secure_form" value="true"/>
 		<input type="submit" value="Login" /></form>
+<script src="/SecureCoding/csrfguard"></script>
 </body>
 </html>

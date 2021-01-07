@@ -78,5 +78,6 @@
 		<input type='hidden' name='task' value='postBlog'/>
 		<input type='submit' name='Blog'/>
 	</form>
+        <script src="/SecureCoding/csrfguard"></script>
 </body>
 </html>

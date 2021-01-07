@@ -29,10 +29,7 @@ public class SessionListener implements HttpSessionListener {
 
 		if(session != null)  {
 			// Generate random 256-bit (32-byte) shared secret and add to session
-			SecureRandom random = new SecureRandom();
-			byte[] sharedSecret = new byte[32];
-			random.nextBytes(sharedSecret);
-			session.setAttribute("secret", sharedSecret);
+			session.setAttribute("secret", ServletUtilities.createSecret());
 
 			//add a connection to the database to session attribute
 			try {

@@ -8,7 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Base64;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -232,22 +232,23 @@ public class Project2 extends Project {
 	 * @return String
 	 */
 	public void createFile(String fileName) throws AppException {
+		final String SESSION_DATA="session_data";
 		final String tempPath = "temp" + File.separator + "upload" + File.separator;
 		
 		HttpSession session = httpRequest.getSession();
 		String content = null;
 		
 		//make sure session_data contains data
-		if( session.getAttribute("session_data") == null) {
-			throw new AppException("session_data is empty");
+		if( session.getAttribute(SESSION_DATA) == null) {
+			throw new AppException(SESSION_DATA + " is empty");
 		}
 		
 		//make sure session_data is text
-		if(session.getAttribute("session_data") instanceof String) {
-			content = (String)session.getAttribute("session_data");
+		if(session.getAttribute(SESSION_DATA) instanceof String) {
+			content = (String)session.getAttribute(SESSION_DATA);
 		}
 		else {
-			throw new AppException("session_data does not contain text");
+			throw new AppException(SESSION_DATA + " does not contain text");
 		}
 		
 
@@ -740,7 +741,7 @@ public class Project2 extends Project {
 		
 		StringBuilder xsdPath = new StringBuilder();
 		xsdPath.append(System.getProperty( "catalina.base" ) + File.separator);
-		xsdPath.append("webapps" + File.separator + 
+		xsdPath.append("webapps" +
 				httpRequest.getServletContext().getContextPath() + File.separator);
 		xsdPath.append("resources/schema.xsd");
 		
@@ -868,7 +869,7 @@ public class Project2 extends Project {
 		//create a path to the webapp
 		StringBuilder webappPath = new StringBuilder();
 		webappPath.append(System.getProperty( "catalina.base" ));
-		webappPath.append(File.separator + "webapps" + File.separator + 
+		webappPath.append(File.separator + "webapps" +
 				httpRequest.getServletContext().getContextPath() + File.separator);
 		
 		//make sure the string is not null
@@ -945,7 +946,7 @@ public class Project2 extends Project {
 	 *          Code from: http://www.java2s.com/Code/Java/XML/implementsXPathVariableResolver.htm
 	 */
 	private static class MapVariableResolver implements XPathVariableResolver {
-		private Hashtable variables = new Hashtable();
+		private HashMap<QName,Object> variables = new HashMap<QName,Object>();
 
 		public void addVariable(String namespaceURI, String localName, Object value) {
 			addVariable(new QName(namespaceURI, localName), value);
@@ -1105,8 +1106,7 @@ public class Project2 extends Project {
 	 */
 	private String encryptPassword(String password) throws AppException {
 		
-	    try
-	    {
+	    try {
 	        MessageDigest crypt = MessageDigest.getInstance("SHA-1");
 	        crypt.reset();
 	        crypt.update(password.getBytes(StandardCharsets.UTF_8));
