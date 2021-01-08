@@ -29,8 +29,8 @@ import com.johnsonautoparts.logger.AppLogger;
 
 /**
  * Servlet Class registered via the web.xml as the primary class for handling
- * calls for the webapp. The doGet() and doPost() are called in Tomcat and
- * registerd as the handlers in this class.
+ * calls for the webapp. The doGet() and doPost() are called in app server and
+ * registered as the handlers in this class.
  * 
  */
 public class ServletHandler extends HttpServlet {
@@ -272,18 +272,33 @@ public class ServletHandler extends HttpServlet {
   			 * 
   			 * TITLE: HTTP verb (method) security
   			 * 
-  			 * RISK: The webapp should make a clear distinction between how requests are process such as
+  			 * RISK: The webapp should make a clear distinction between how requests are processed such as
   			 *       by POST or GET. Unclear application flow may occur if GET and POST requests are accepted
   			 *       for the same type of request. Also, GET requests include the parameter data into the web
   			 *       request log which could allow sensitive information such as password if for example a
   			 *       login request is processed as a GET. If the login goes through a proxy server or other
   			 *       service, the data could also be leaked.
   			 */
-  			//nothing matched so process as a GET
-  			AppLogger.log("Cannot process POST request, forwarding to GET");
-  			doGet(request, response);
+  			/**
+  			 * SOLUTION: Based on the developers comments you can see they may have discovered an issue with
+  			 *           the application but could not resolve it, so they just forwarded any "accidental"
+  			 *           POST request on to the GET. The forwarding to doGet() needs to be removed and
+  			 *           and error returned to the user since no matching logic was made at this point.
+  			 *           
+  			 *           The following lines are commented out from the original code:
+  			 *
+  			 * //nothing matched so process as a GET
+  			 * AppLogger.log("Cannot process POST request, forwarding to GET");
+  			 * doGet(request, response);
+  			 * 
+  			 * break;
+  			 */
   			
-  			break;
+	  		AppLogger.log("POST received an unknown action request");
+	  		response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR );
+	  		ServletUtilities.sendError(response, "application error");
+	  		return;
+	  		//SOLUTION END
   		}
   		
   		//done processing POST so return
