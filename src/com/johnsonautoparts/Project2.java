@@ -14,8 +14,10 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.InvalidPathException;
 import java.nio.file.LinkOption;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
@@ -47,6 +49,7 @@ import org.xml.sax.SAXException;
 
 import com.johnsonautoparts.exception.AppException;
 import com.johnsonautoparts.logger.AppLogger;
+import com.johnsonautoparts.servlet.SessionConstant;
 
 /**
  * 
@@ -232,23 +235,28 @@ public class Project2 extends Project {
 	 * @return String
 	 */
 	public void createFile(String fileName) throws AppException {
-		final String SESSION_DATA="session_data";
-		final String tempPath = "temp" + File.separator + "upload" + File.separator;
+		Path tempPath=null;
+		try {
+			tempPath = Paths.get("temp", "upload", fileName);
+		}
+		catch(InvalidPathException ipe) {
+			throw new AppException("createFile received invalid path");
+		}
 		
 		HttpSession session = httpRequest.getSession();
 		String content = null;
 		
 		//make sure session_data contains data
-		if( session.getAttribute(SESSION_DATA) == null) {
-			throw new AppException(SESSION_DATA + " is empty");
+		if( session.getAttribute(SessionConstant.SESSION_DATA) == null) {
+			throw new AppException(SessionConstant.SESSION_DATA + " is empty");
 		}
 		
 		//make sure session_data is text
-		if(session.getAttribute(SESSION_DATA) instanceof String) {
-			content = (String)session.getAttribute(SESSION_DATA);
+		if(session.getAttribute(SessionConstant.SESSION_DATA) instanceof String) {
+			content = (String)session.getAttribute(SessionConstant.SESSION_DATA);
 		}
 		else {
-			throw new AppException(SESSION_DATA + " does not contain text");
+			throw new AppException(SessionConstant.SESSION_DATA + " does not contain text");
 		}
 		
 
@@ -258,7 +266,7 @@ public class Project2 extends Project {
 		 * on creating a safe filename
 		 */
 		//full path to file to be created
-		String filePath = null;
+		String safePathStr = null;
 		try {
 			/*
 			 * SOLUTION: remove special characters and potentially dangerous characters such as periods
@@ -269,7 +277,7 @@ public class Project2 extends Project {
 			//SOlUTION END
 			
 			//check the path
-			filePath = makeSafePath(tempPath + sanitizedFilename);
+			safePathStr = makeSafePath(tempPath + sanitizedFilename);
 		}
 		catch(IOException ioe) {
 			throw new AppException("makeSafePath threw an IO error: " + ioe.getMessage());
@@ -277,8 +285,9 @@ public class Project2 extends Project {
 
 		
 		//write the session_data content to the file
-		File f = new File(filePath);
-		try (OutputStream out = new FileOutputStream(f) ) {
+		//File f = new File(filePath);
+		Path safePath = Paths.get(safePathStr);
+		try (OutputStream out = new FileOutputStream(safePath.toFile()) ) {
 			out.write(content.getBytes(StandardCharsets.UTF_8));
 		}
 		catch(FileNotFoundException fnfe) {
@@ -377,10 +386,15 @@ public class Project2 extends Project {
 		final int OVERFLOW = 0x1600000; // 25MB
 		final int TOOMANY = 1024; //SOLUTION: max number of files which can be included in a zip
 		
-		final String tempPath = "temp" + File.separator + "zip";
-		String zipPath = tempPath + File.separator + fileName + File.separator;
+		Path zipPath=null;
+		try {
+			zipPath = Paths.get("temp", "zip", fileName);
+		}
+		catch(InvalidPathException ipe) {
+			throw new AppException("unzip passed an invalide filename");
+		}
 		
-		try (FileInputStream fis = new FileInputStream(fileName)) {
+		try (FileInputStream fis = new FileInputStream(zipPath.toString())) {
 			try (ZipInputStream zis = new ZipInputStream(new BufferedInputStream(fis)) ) {
 				ZipEntry entry;
 
@@ -422,14 +436,22 @@ public class Project2 extends Project {
 					
 					//check if a directory is in the zip
 					if (entry.isDirectory()) {
-						File f = new File(name);
-						f.mkdir();
+						Path p = Paths.get(name);
+						Files.createDirectory(p);
 						continue;
 					}
 					//SOUTION END
 					
 					//output file is path plus entry
-					try (FileOutputStream fos = new FileOutputStream(zipPath + entry.getName()) ) {
+					Path entryPath=null;
+					try {
+						entryPath = Paths.get(zipPath.toString(), entry.getName());
+					}
+					catch(InvalidPathException ipe) {
+						throw new AppException("unzip contains invalid entry: " + ipe.getMessage());
+					}
+					
+					try (FileOutputStream fos = new FileOutputStream(entryPath.toString()) ) {
 						try (BufferedOutputStream dest = new BufferedOutputStream(fos, BUFFER) ) {
 					
 							/**
@@ -486,7 +508,7 @@ public class Project2 extends Project {
 		}
 
 		//directory to the extracted zip
-		return zipPath;
+		return zipPath.toString();
 	}
 
 	/**
@@ -738,12 +760,9 @@ public class Project2 extends Project {
 		 * DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		 */
 		//SOLUTION END
-		
-		StringBuilder xsdPath = new StringBuilder();
-		xsdPath.append(System.getProperty( "catalina.base" ) + File.separator);
-		xsdPath.append("webapps" +
-				httpRequest.getServletContext().getContextPath() + File.separator);
-		xsdPath.append("resources/schema.xsd");
+		Path xsdPath = Paths.get(System.getProperty( "catalina.base" ), "webapps",
+				httpRequest.getServletContext().getContextPath(), "resources", "schema.xsd");
+
 		
 		//the code for this XML parse is very rudimentary but is here for demonstration
 		//purposes to work with XML schema validation
@@ -764,7 +783,7 @@ public class Project2 extends Project {
 			 */
 
 			SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-			Schema schema = factory.newSchema(new File(xsdPath.toString()));
+			Schema schema = factory.newSchema(xsdPath.toFile());
 			Validator validator = schema.newValidator();
 	            
 			InputSource is = new InputSource(xml);
@@ -867,10 +886,14 @@ public class Project2 extends Project {
 	 */
 	public boolean xpathLogin(String userPass) throws AppException {
 		//create a path to the webapp
-		StringBuilder webappPath = new StringBuilder();
-		webappPath.append(System.getProperty( "catalina.base" ));
-		webappPath.append(File.separator + "webapps" +
-				httpRequest.getServletContext().getContextPath() + File.separator);
+		Path userDbPath=null;
+		try {
+			userDbPath = Paths.get(System.getProperty( "catalina.base" ), "webapps",
+				httpRequest.getServletContext().getContextPath(), "resources", "users.xml");
+		}
+		catch(InvalidPathException ipe) {
+			throw new AppException("xpathLogin passed and invalide path");
+		}
 		
 		//make sure the string is not null
 		if(userPass == null) {
@@ -883,13 +906,13 @@ public class Project2 extends Project {
 			String[] args = userPass.split(":");
 			String username = args[0];
 			String passHash = encryptPassword(args[1]);
-			String userDbPath = webappPath.toString() + "resources/users.xml";
+
 			
 			//load the users xml file
 			DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
 			domFactory.setNamespaceAware(true);
 			DocumentBuilder builder = domFactory.newDocumentBuilder();
-			Document doc = builder.parse(userDbPath);
+			Document doc = builder.parse(userDbPath.toString());
 
 			/**
 			 * SOLUTION: To protect XPath queries, we can use defensive measure similar to SQL injection

@@ -4,6 +4,10 @@ import java.io.*;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.InvalidPathException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.text.Normalizer;
 import java.text.Normalizer.Form;
@@ -233,20 +237,18 @@ public class Project1 extends Project {
 		    throw new AppException("internationalization() found script tag");
 		}
 	
-		//get the operating system
-		String os = System.getProperty("os.name");
-		String fileName="/dev/null";
+		//create a temp file
+		Path tempFile=null;
+		try {
+			tempFile = Files.createTempFile("", ".tmp");
+		} 
+		catch (IOException ioe) {
+			throw new AppException("IOException in internationaliation(): " + ioe.getMessage());
+		}
 		
-		//select the correct file based on the operating system
-		if(os.contains("indows")) {
-			fileName = "NUL";
-		}
-		else if(os.contains("inux") || os.contains("ac")) {
-			fileName = "/dev/null";
-		}
 		
 		//write the text to file
-		try (PrintWriter writer = new PrintWriter(new FileWriter(fileName)) ) {
+		try (PrintWriter writer = new PrintWriter(new FileWriter(tempFile.toFile())) ) {
 			/**
 			 * SOLUTION: The printf method is another which has the capability to format text with a locale
 			 *           Another example to avoid additional attack vectors.
@@ -383,10 +385,17 @@ public class Project1 extends Project {
 	 * @return String
 	 */
 	public String variableWidthEncoding(String str) throws AppException {
-		File readFile = new File(str);
+		Path path=null;
+		try {
+			path = Paths.get(str);
+		}
+		catch(InvalidPathException ipe) {
+			throw new AppException("variableWidthEncoding was given and invalid path");
+		}
+		
 		String readStr = "";
 		
-		try (FileInputStream fios = new FileInputStream(readFile) ) {
+		try (FileInputStream fios = new FileInputStream(path.toString()) ) {
 			byte[] data = new byte[1024+1];
 			int offset = 0;
 			int bytesRead = 0;
