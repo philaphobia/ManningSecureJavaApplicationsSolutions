@@ -36,9 +36,20 @@ import com.johnsonautoparts.logger.AppLogger;
 public class ServletHandler extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * Project 4, Milestone 3, Task 6
+	 * 
+	 * TITLE: Avoid leaking session data across servlet sessions
+	 * 
+	 * SOLUTION: The scope of this loginEmail variable here is within the singleton
+	 *           class of this HttpServlet which means it could be leaked across
+	 *           sessions. The variable scope and context should not be used here.
+	 *           It should be commented out and fixed within the context below in the
+	 *           email_login switch block of doPost().
+	 */
 	//keep track of previous email address for verification
 	private String loginEmail="none@doesnotexist.com";
-	
+
 	
   	/**
   	 * @see HttpServlet#HttpServlet()
@@ -47,10 +58,25 @@ public class ServletHandler extends HttpServlet {
   		super();
   	}
   	
-  	
+	/**
+	 * Project 4, Milestone 1, Task 6
+	 * 
+	 * TITLE: Do not add main() method to a webapp
+	 * 
+	 * RISK: A main() method may not be reachable by an attacker, but it should not be included
+	 *       in a production environment. A main() method may also leak sensitive information or
+	 *       allow an attacker with access to the WAR with additional access.
+	 * 
+	 * REF: SonarSource RSPEC-2653
+	 * 
+	 */
   	/**
+  	 * SOLUTION: The entire main() method should be commented out or deleted
+  	 *
+  	 *
   	 * Out of band used test functions of WAR
   	 */
+  	/*
   	public static void main(String[] args) {
   		if(! (args.length > 0) ) {
   			System.err.println("Missing argument");
@@ -79,6 +105,8 @@ public class ServletHandler extends HttpServlet {
   			System.exit(1);
   		}
   	}
+  	*/
+  	//SOLUTION END
   	
   	
 	/**
@@ -251,6 +279,16 @@ public class ServletHandler extends HttpServlet {
   				//call fileUpload
   				boolean uploadResponse = project4.fileUpload(numFiles);
   				responseContent = Boolean.toString(uploadResponse);
+  				
+  	  			//send successful response
+  	  			PrintWriter outUpload = response.getWriter();
+  	  			outUpload.println(responseContent);
+  			}
+  			catch(IOException ioe) {
+  	  			AppLogger.log("POST caught IOException: " + ioe.getMessage());
+  	  			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR );
+  	  			ServletUtilities.sendError(response, "application error");
+  	  			return;
   			}
   			catch(AppException ae) {
   	  			AppLogger.log("POST caught AppException: " + ae.getPrivateMessage());
@@ -259,9 +297,7 @@ public class ServletHandler extends HttpServlet {
   	  			return;
   			}
   		
-  			//send successful response
-  			PrintWriter outUpload = response.getWriter();
-  			outUpload.println(responseContent);
+
   			
   			break;
   			
@@ -410,8 +446,21 @@ public class ServletHandler extends HttpServlet {
   		 */
   		//throw ServletException for processing
   		catch (AppException ae) {
-  			AppLogger.log("Caught AppException: " + ae.getPrivateMessage());
-  			throw new ServletException(ae.getPrivateMessage());
+  			AppLogger.log("POST caught AppException: " + ae.getPrivateMessage());
+  			/*
+  			 * SOLUTION: Logging the error is correct, but throwing ServletException is not the correct 
+  			 *           flow. An error should be sent to the user via the HttpResponse with a 500 error
+  			 *           with SC_INTERNAL_SERVER_ERROR.
+  			 *           
+  			 *           The original code is commented out below:
+  			 *
+  			 * throw new ServletException(ae.getPrivateMessage());
+  			 */
+	  		
+	  		response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR );
+	  		ServletUtilities.sendError(response, ae.getMessage());
+	  		return;
+	  		//SOLUTION END
   		}
 
   	}

@@ -29,6 +29,7 @@
       <filter-name>SecurityFilter</filter-name>
       <url-pattern>/app</url-pattern>
    </filter-mapping>
+   <!-- EVERYTHING BELOW THIS LINE IS FOR OWASP CSRF GUARD -->
    <filter>
       <filter-name>CSRFGuard</filter-name>
       <filter-class>org.owasp.csrfguard.CsrfGuardFilter</filter-class>

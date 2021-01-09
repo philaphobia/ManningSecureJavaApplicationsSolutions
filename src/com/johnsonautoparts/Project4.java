@@ -1,7 +1,10 @@
 package com.johnsonautoparts;
 
 import java.io.File;
+import java.io.FileInputStream;
+
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
@@ -23,6 +26,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -57,9 +61,22 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+/*
+ * Uncomment imports for Project 4, Milestone 1, Task 3
+import org.apache.tika.exception.TikaException;
+import org.apache.tika.metadata.Metadata;
+import org.apache.tika.parser.AutoDetectParser;
+import org.apache.tika.parser.ParseContext;
+import org.apache.tika.parser.Parser;
+import org.apache.tika.sax.BodyContentHandler;
+*/
+
 import org.owasp.encoder.Encode;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
+
+import org.owasp.html.PolicyFactory;
+import org.owasp.html.HtmlPolicyBuilder;
 
 import com.johnsonautoparts.exception.AppException;
 import com.johnsonautoparts.logger.AppLogger;
@@ -94,7 +111,9 @@ public class Project4 extends Project {
 	 * TITLE: Do not trust hidden forms
 	 * 
 	 * RISK: While hidden forms are not displayed in the web browser, they can still be manipulated by
-	 *       the user and forged. Hidden forms should be sanitized just like all other data.
+	 *       the user and forged. Hidden forms should be sanitized just like all other data. This method
+	 *       is called from ServletHandler under the doPost() method. The secureForm parameter passed here
+	 *       is retrieved from a hidden field in WebContent/jsp/login.jsp
 	 * 
 	 * REF: CMU Software Engineering Institute IDS14-J
 	 * 
@@ -111,12 +130,35 @@ public class Project4 extends Project {
 		//process login
 		boolean loginSuccess = project2.xpathLogin(userPass);
 		
-		if(loginSuccess) {
-			return(secureForm);
-		}
-		else {
-			return(secureForm + " unsuccessful");
-		}
+		/**
+		 * SOLUTION: The username and password are sanitized in the xpath login and not replayed to the user
+		 *           so we can focus on the secureFrom variable which is returned here and then included in
+		 *           a response to the user. The data needs to be sanitized for at least Unicode, HTML, and 
+		 *           JavaScript like other projects. In case you have not worked on other projects, the methods
+		 *           are duplicated here.
+		 */
+		//normalize the data to remove unicode characters
+		String safeData = Normalizer.normalize(secureForm, Form.NFKC);
+		
+		//encode with OWASP Encoder project to avoid XSS
+		safeData = Encode.forHtml(safeData);
+		safeData = Encode.forJavaScriptBlock(safeData);
+		//SOLUTION END
+		
+		/**
+		 * SOLUTION: replace the unsanitized text with the sanitized version
+		 * 
+		 * The original code is commented out and replaced
+		 * 
+		 * if(loginSuccess) {
+		 *  	return(secureForm);
+		 * }
+		 * else {
+		 *  	return(secureForm + " unsuccessful");
+		 * }
+		 */
+		return( loginSuccess ? safeData : safeData + "unsuccessful" );
+		//SOLUTION END
 	}
 	
 	
@@ -148,7 +190,7 @@ public class Project4 extends Project {
 	 * 
 	 * RISK: The referer header can be manipulated by a user and should be assumed to be tainted data.
 	 *       Since the header is untrusted, it should not be used as a reference source for making
-	 *       security deisions.
+	 *       security decisions.
 	 * 
 	 * REF: CMU Software Engineering Institute IDS56-J
 	 * CODE: https://www.tutorialspoint.com/servlets/servlets-file-uploading.htm
@@ -157,7 +199,7 @@ public class Project4 extends Project {
 	 * @return boolean
 	 */
 	public boolean fileUpload(int numFiles) throws AppException {
-		final String[] ACCEPTED_CONTENT = {"application/pdf"};
+		final String ACCEPTED_CONTENT = "application/pdf";
 		DiskFileItemFactory factory = new DiskFileItemFactory();
 		   
 		// Location to save data that is larger than maxMemSize.
@@ -181,14 +223,7 @@ public class Project4 extends Project {
                 String contentType = fi.getContentType();
                 
                 //check if the contentType is accepted
-                boolean contentTypeOk = false;
-                for(String contentTypeCheck : ACCEPTED_CONTENT) {
-                	if(contentTypeCheck.equals(contentType)) {
-                		contentTypeOk = true;
-                	}
-                }
-                //throw an exception if one of the accepted content-type was not found
-                if(! contentTypeOk) {
+                if(! ACCEPTED_CONTENT.equals(contentType)) {
                 	throw new AppException("File was uploaded with a type that is not accepted");
                 }
                 
@@ -201,6 +236,17 @@ public class Project4 extends Project {
                 }
                 
                 fi.write( file );
+                
+                /**
+                 * SOLUTION: For a more in-depth review of the actual content type, you can use the Apache Tika
+                 *           library. The method verifyContentType should be reviewed below and uncommented
+                 *           along with the if block below.
+                 */
+                /*
+                if(! verifyContentType(file, ACCEPTED_CONTENT) ) {
+                	throw new AppException("File was uploaded with a type that is not accepted");
+                }
+                */
             }//end while to process FileItems
             
             //all files uploaded successfully
@@ -219,7 +265,50 @@ public class Project4 extends Project {
 		}
 	}
 	
+	/**
+	 * SOLUTION: CMU SEI recommends using Tika library to perform a full verification of the
+	 *           content-type before accepting a file.
+	 *           
+	 *           Due to export restrictions, you will need to:
+	 *           - download the Tika library
+	 *           - place the JAR into the WebContet/lib folder
+	 *           - right-click the WebContent folder in Eclipse and chose refresh
+	 *           - uncomment the code below
+	 * 
+	 * @param f
+	 * @param contentType
+	 * @return
+	 * @throws AppException
+	 */
+	/*
+	private boolean verifyContentType(File f, String contentType) throws AppException {
+		try (InputStream is = new FileInputStream(f)) {
+			BodyContentHandler contenthandler = new BodyContentHandler();
+			Metadata metadata = new Metadata();
+			metadata.set(Metadata.RESOURCE_NAME_KEY, f.getName());
+			
+			Parser parser = new AutoDetectParser();
+			parser.parse(is, contenthandler, metadata, new ParseContext());
+			       
+			if (metadata.get(Metadata.CONTENT_TYPE).equalsIgnoreCase(contentType)) {
+				return true;
+			} 
+			else {
+				return false;
+			}
+		}
+		catch(IOException ioe) {
+			throw new AppException("verifyContentType caught IOException: " + ioe.getMessage());
+		}
+		catch(TikaException | SAXException e) {
+			throw new AppException("verifyContentType caught exception: " + e.getMessage());
+		}
 
+	}
+	*/
+	//SOLUTION END
+	
+	
 	/**
 	 * Project 4, Milestone 1, Task 4
 	 * 
@@ -229,12 +318,12 @@ public class Project4 extends Project {
 	 *       to a malicious user that would help in an attack. GetMessage() can be used and sent to the
 	 *       audit data with a general message to the user.
 	 * 
-	 * REF: RSPEC-1148
+	 * REF: SonarSource RSPEC-1148
 	 * 
 	 * @param field
 	 * @return String
 	 */
-	public String getAttribute(String field) {
+	public String getAttribute(String field) throws AppException {
 		try {
 			String normField = Normalizer.normalize(field, Form.NFKC);
 			String txtField = normField.replaceAll("\\^[0-9A-Za-z_]","");
@@ -248,15 +337,29 @@ public class Project4 extends Project {
 			}
 		}
 		catch(IllegalStateException ise) {
-			//convert the printstack to a string for better debugging
-			StringWriter sw = new StringWriter();
-			PrintWriter pw = new PrintWriter(sw);
-			
-			//call printStackTrace to the print/string
-			ise.printStackTrace(pw);
+			/**
+			 * SOLUTION: printStackTrace() should not be used even in this case where the output
+			 *           is captured to a string. Look at exception/AppException to see how it is structured.
+			 *           AppException extends the normal exception, but implements a private message
+			 *           string to store the error. The public message is a generic string about 
+			 *           application error which will be returned in the normal getMessage() to avoid
+			 *           leaking sensitive information to the user. The developer must explicitly request 
+			 *           getPrivateMessage() to retrieve the technical description of the error.
+			 *           
+			 *           The original code is commented out and a custom AppException is thrown instead
+			 *
+			 * //convert the printstack to a string for better debugging
+			 * StringWriter sw = new StringWriter();
+			 * PrintWriter pw = new PrintWriter(sw);
+			 * 
+			 * //call printStackTrace to the print/string
+			 * ise.printStackTrace(pw);
 
-			//return the error as the content
-			return(sw.toString());
+			 * //return the error as the content
+			 * return(sw.toString());
+			 */
+			throw new AppException("getAtrribute caught IllegalStateException: " + ise.getMessage());
+			//SOLUTION END
 		}
 
 	}
@@ -292,11 +395,43 @@ public class Project4 extends Project {
 	 * @return String
 	 */
 	public String postBlog(String blogEntry) throws AppException {
+		/**
+		 * SOLUTION: Remember that even though the data was sanitized in the JSP, the user can still control
+		 *           the sending of the data to the webapp. The same code should be repeated in this method
+		 *           to sanitize the data in case a malicious user bypass the form and replicated the sending
+		 *           of the data directly.
+		 */
+		String safeHTML="";
+		
+		//only work on data if it is not null
+		if(blogEntry != null) {
+			//use OWASP HTML sanitizer to limit elements to whitelist
+			PolicyFactory policy = new HtmlPolicyBuilder()
+				.allowElements("p")
+		   	 	.allowElements("table")
+		   	 	.allowElements("div")
+		   	 	.allowElements("tr")
+		   		.allowElements("td")
+		   	 	.toFactory();
+			
+			//apply policy to the HTML
+			safeHTML = policy.sanitize(blogEntry);
+		}
+		//SOLUTION END
+		
 		try {
 			String sql = "INSERT INTO blog(blog) VALUES (?)";
 			
 			try (PreparedStatement stmt = connection.prepareStatement(sql) ) {
-				stmt.setString(1, blogEntry);
+				/**
+				 * SOLUTION: Replace the blogEntry unsanitized variable with our safe version
+				 * 
+				 *           The following original code is commented out:
+				 *
+				 * stmt.setString(1, blogEntry);
+				 */
+				stmt.setString(1, safeHTML);
+				//SOLUTION END
 				
 				//execute the insert
 				int rows = stmt.executeUpdate();
@@ -328,6 +463,21 @@ public class Project4 extends Project {
 
 	
 	/**
+	 * Project 4, Milestone 1, Task 6
+	 * 
+	 * TITLE: Do not add main() method to a webapp
+	 * 
+	 * RISK: A main() method may not be reachable by an attacker, but it should not be included
+	 *       in a production environment. A main() method may also leak sensitive information or
+	 *       allow an attacker with access to the WAR with additional access.
+	 * 
+	 * REF: SonarSource RSPEC-2653
+	 * 
+	 */
+	//SOLUTION END
+	
+	
+	/**
 	 * Project 4, Milestone 2, Task 1
 	 * 
 	 * TITLE: HTTP verb (method) security
@@ -339,7 +489,7 @@ public class Project4 extends Project {
 	 *       login request is processed as a GET. If the login goes through a proxy server or other
 	 *       service, the data could also be leaked.
 	 *
-	 * IMPORTANT: No changes are made in this mile for the current task. The changes are made in the
+	 * IMPORTANT: No changes are made in this file for the current task. The changes are made in the
 	 *            ServletHandler by reviewing the doPost() and doGet() methods.
 	 */
 	//END Project 4, Milestone 2, Task 1
@@ -362,10 +512,28 @@ public class Project4 extends Project {
 	 * @param header
 	 * @return String
 	 */
-	public String addHeader(String header) {
-		httpResponse.addHeader("X-Header", header);
+	public String addHeader(String header) throws AppException {
+		/**
+		 * SOLUTION: Allowing unsanitized data into the headers is very dangerous and performing filtering
+		 *           with regex and other methods we used in other milestones may not even be safe. The
+		 *           recommendation via RSPEC-5167 is to only use a whitelist of acceptable strings.
+		 *           
+		 *           The original code is commented out:
+		 *
+		 * httpResponse.addHeader("X-Header", header);
+		 */
+		String[] whitelistHeaders = {"distinguish","resolved"};
   		
-		return(header);
+		for(String whitelistHeader : whitelistHeaders) {
+			if(whitelistHeader.equals(header)) {
+				httpResponse.addHeader("X-Header", header);
+				return(header);
+			}
+		}
+		
+		//no header matched so throw an exception
+		throw new AppException("addHeader requested header which is not in whitelist");
+		//SOLUTION END
 	}
 	
 	
@@ -399,10 +567,10 @@ public class Project4 extends Project {
 	 * NOTES: In a previous milestone you added security controls to filter the data in the comments.jsp
 	 *        form so no further changes are required in the JSP.
 	 *        
-	 *        Develop a different security control than the header here (such as a CSRF token). 
+	 *        Develop a different security control than the header here (hint: CSRF token). 
 	 *        
 	 *        You will also want to duplicate filtering on the data from the form here before it is entered 
-	 *        into the database.  Event though the data was filtered before displaying in the form, a 
+	 *        into the database.  Even though the data was filtered before displaying in the form, a 
 	 *        malicious user could still change it before re-submitting to this method.
 	 *        
 	 * REF: SonarSource RSPEC-2089
@@ -410,24 +578,70 @@ public class Project4 extends Project {
 	 * @param comments
 	 * @return String
 	 */
+	
+	/**
+	 * SOLUTION: Implementing Cross Site Request Forgery (CSRF) token avoidance does not involve simple code
+	 *           changes since it required the injection of a unique variable in the form which is know on the
+	 *           server side, so when the form is submitted the token is verified. Some frameworks have
+	 *           an existing implementation of CSRF. For this solution, we implemented the OWASP CSRF Guard:
+	 *           https://owasp.org/www-project-csrfguard/
+	 *           
+	 *           Implementation involves multiple steps:
+	 *           1. The library is placed in WebContent/WEB-INF/lib/csrfguard-3.1.0.jar
+	 *           2. The WebContent/WEB-INF/web.xml is updated to create the CSRF Guard servlet
+	 *             - An XML note is included that everything below the line is for CSRF Guard
+	 *             - <filter> is created for CSRFGuard
+	 *             - <listener> are added
+	 *             - <servletn> for org.owasp.csrfguard.servlet.JavaScriptServlet
+	 *             - <servlet-mapping> for the servlet to /csrfguard
+	 *           3. The comments.jsp injects the token with the <script> tag:
+	 *             - <script src="/SecureCoding/csrfguard"></script>
+	 *           
+	 *           With these changes, the JSP injects the token into the response and the CSRF Guard
+	 *           Filter verifies the token before any processing of the servlet/ServletHandler occurs
+	 *             
+	 */
 	public String postComments(String comments) throws AppException {
-		final String REFERER_COMMENTS = "comments.jsp";
-
-		String referer = httpRequest.getHeader("referer");
-		if(referer == null) {
-			throw new AppException("comments() cannot retrieve referer header");
-		}
-
-		//check whitelist referer comments form
-		if(!referer.contains(REFERER_COMMENTS)) {
-			throw new AppException("comments() cannot validate referer header");
-		}
+		/**
+		 * SOLUTION: The original code is comments out below which checked the referer header:
+		 *
+		 * final String REFERER_COMMENTS = "comments.jsp";
+		 *
+		 * String referer = httpRequest.getHeader("referer");
+		 * if(referer == null) {
+		 *  	throw new AppException("comments() cannot retrieve referer header");
+		 * }
+		 *
+		 * //check whitelist referer comments form
+		 * if(!referer.contains(REFERER_COMMENTS)) {
+		 *  	throw new AppException("comments() cannot validate referer header");
+		 * }
+		 */
 
 		try {
 			String sql = "INSERT INTO COMMENTS(comments) VALUES (?)";
 			
 			try (PreparedStatement stmt = connection.prepareStatement(sql) ) {
-				stmt.setString(1, comments);
+				/**
+				 * SOLUTION: A user could have changed the comments before submitting, so we need
+				 *           to duplicate the same code in the JSP here.
+				 *           
+				 *           The original code is commented out and replace with the sanitized
+				 *           comments data:
+				 *
+				 * stmt.setString(1, comments);
+				 */
+				String safeComments="";
+				
+				//only work on data if it is not null
+				if(comments != null) {
+					//encode for HTML first
+					String safeHTML = Encode.forHtml(comments);
+					//encode for JavaScript after making HTML safe
+					safeComments = Encode.forJavaScriptBlock(safeHTML);
+				}
+				stmt.setString(1, safeComments);
+				//SOLUTION END
 				
 				//execute the insert and return the number of rows
 				int rows = stmt.executeUpdate();
@@ -472,7 +686,25 @@ public class Project4 extends Project {
 	 */
 	public void redirectUser(String location) throws AppException {
 		try {
-			httpResponse.sendRedirect(location);
+			/**
+			 * SOLUTION: Similar to avoiding header injection, allowing redirects to uncontrolled
+			 *           URLs is unsafe. RSPEC-5146 recommends using an explicit whitelist for the
+			 *           URL which all redirect locations must contain.
+			 *           
+			 *           The original code is commented out and replaced with a whitelest:
+			 *
+			 * httpResponse.sendRedirect(location);
+			 */
+			String whiteList = "http://localhost:8080/SecureCoding";
+			
+			if(location.startsWith(whiteList)) {
+				httpResponse.sendRedirect(location);
+			}
+			else {
+				throw new IOException("redirectUser received an illegal URL");
+			}
+			//SOLUTION END
+			
 		} 
 		catch (IOException e) {
 			throw new AppException("redirectUser caught exception for location: " + e.getMessage());
@@ -512,37 +744,80 @@ public class Project4 extends Project {
 	 * @param str
 	 * @return String
 	 */
-	public String rememberMe(String username) {
+	public boolean rememberMe(String username) throws AppException {
 		HttpSession session = httpRequest.getSession();
-		String secretBase64 = null;
 		
 		//get secret key from the session
-		Object secretObj = session.getAttribute(SessionConstant.SECRET);
+		String sessionId = session.getId();
 		
-		if(secretObj instanceof byte[]) {
-			//convert the secret to base64 text
-			secretBase64 = Base64.getUrlEncoder().withoutPadding().encodeToString( (byte[]) secretObj );
-		}
-		//secret doesn't exist so re-generate
-		else {
-			secretObj = ServletUtilities.createSecret();
-			session.setAttribute(SessionConstant.SECRET, secretObj);
+		try {
+			//get the role of a row in the sessions tables that matches the session id
+			String sql = "SELECT secret FROM sessions WHERE id = ?";
 			
-			secretBase64 = Base64.getUrlEncoder().withoutPadding().encodeToString( (byte[]) secretObj );
+			try (PreparedStatement stmt = connection.prepareStatement(sql) ) {
+			
+				//set the parameter and execute the SQL
+				stmt.setString(1, sessionId);
+				try (ResultSet rs = stmt.executeQuery() ) {
+		    
+					//check if any results returned
+					if (rs.next()) {
+	
+						//false if we have a problem getting the secret
+						String secret = rs.getString(1);
+						if(secret == null) {
+							return false;
+						}
+						
+						/**
+						 * SOLUTION: Sensitive information such as secret, password, or keys
+						 *           should not be stored on the browser. If the data is needed
+						 *           it can be stored in the session but must be cleared when it
+						 *           is no longer needed or the session is removed.
+						 *           
+						 *           The session data cleansing can be performed in a listener
+						 *           such as the servlet/SessionListener sessionDestroyed()
+						 *           method.
+						 *           
+						 *           The original code is commented out and the data is stored
+						 *           in the session instead:
+						 *
+						 * //add the cookie to the response
+						 * Cookie loginCookie = new Cookie("rememberme", secret);
+						 *
+						 * //make cookie HttpOnly and Secure to protect the data in transit
+						 * loginCookie.setHttpOnly(true);
+						 * loginCookie.setSecure(true);
+						 *
+						 * //add the cookie to the response
+						 * httpResponse.addCookie(loginCookie);
+						 */
+						session.setAttribute("session_secret", secret);
+						//SOLUTION END
+
+						return(true);
+					}
+					//false if no results return which means no session in the db
+					else {
+						return(false);
+					}
+				}//end resultset
+			}//end statement
+	   
+		} 
+		catch (SQLException se) {
+			throw new AppException("rememberMe caught SQLException: " + se.getMessage());
+		} 
+		finally {
+			try {
+				connection.close();
+			} 
+			catch (SQLException se) {
+				//this is an application error but does not represent an error for the user
+				AppLogger.log("rememberMe failed to close connection: " + se.getMessage());
+			}
 		}
 
-		//add the cookie to the response
-		Cookie loginCookie = new Cookie("rememberme", secretBase64);
-		
-		//make cookie HttpOnly and Secure to protect the data in transit
-		loginCookie.setHttpOnly(true);
-		loginCookie.setSecure(true);
-		//SameSite=Strict is set in the WebContent/META-INF/context.xml
-		
-		//add the cookie to the response
-		httpResponse.addCookie(loginCookie);
-
-		return("rememberme cookie added for " + username);
 	}
 	
 	
@@ -566,9 +841,26 @@ public class Project4 extends Project {
 		env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
 		env.put(Context.PROVIDER_URL, "ldap://localhost:389/o=JohnsonAutoParts");
 
-		// Use anonymous authentication
-		env.put(Context.SECURITY_AUTHENTICATION, "none");
-
+		/**
+		 * SOLUTION: The anonymous connection to the LDAP is not secure and an authenticated
+		 *           bind should be used instead to protect user credentials.
+		 *           
+		 *           The original code is commented out and replace with and authenticated
+		 *           connection:
+		 *
+		 * // Use anonymous authentication
+		 * env.put(Context.SECURITY_AUTHENTICATION, "none");
+		 */
+		// The LDAP password is retrieved from the context in this example
+		ServletContext context = httpRequest.getServletContext();
+		String ldapPass = (String)context.getAttribute("LDAP_PASSWORD");
+		
+		// Use simple authentication
+		env.put(Context.SECURITY_AUTHENTICATION, "simple");
+		env.put(Context.SECURITY_PRINCIPAL, "cn=S. User, ou=NewHires, o=JNDITutorial");
+		env.put(Context.SECURITY_CREDENTIALS, ldapPass);
+		//SOLUTION END
+		
 		// Create the initial context and allow NamingException to be thrown
 		return new InitialDirContext(env);
 	}
@@ -589,8 +881,21 @@ public class Project4 extends Project {
 	 * @param str
 	 * @return String
 	 */
-	public String ldapLogin(String userSN, String userPassword) throws AppException {
+	public String ldapLogin(String userSN, String password) throws AppException {
 		DirContext context = null;
+		
+		/**
+		 * SOLUTION: Before allowing the variables to be passed to the LDAP search query
+		 *           they should be checked for characters which are not accepted. Due to
+		 *           the dangers of LDAP injection, attempting to filter out unwanted characters
+		 *           may be too dangerous so just check for a known good whitelist. In this
+		 *           solution, we use the regex strings of \s which matches whitespace and
+		 *           \w which matches the upper and lower case letters including number [a-zA-Z_0-9]
+		 */
+		if (!userSN.matches("[\\w\\s]*") || !password.matches("[\\w]*")) {
+			throw new AppException("ldapLogin received invalid characters sent in user or password");
+		}
+		//SOLUTION END
 		
 		try {
 			context = getLdapContext();
@@ -602,7 +907,7 @@ public class Project4 extends Project {
 			String base = "dc=johnsonautoparts,dc=com";
 		  
 			// The following resolves to (&(sn=S*)(userPassword=*))     
-			String filter = "(&(sn=" + userSN + ")(userPassword=" + userPassword + "))";
+			String filter = "(&(sn=" + userSN + ")(userPassword=" + password + "))";
 		  
 			//response string
 			StringBuilder sbResponse = new StringBuilder();
@@ -649,7 +954,7 @@ public class Project4 extends Project {
 	 *       curl -v -b "JSESSIONID=ED0850AD19EF0FF59651BAC7FC2662AZ" 
 	 *            "http://localhost:8080/SecureCoding/app?project=project4&task=isRoleValid&param1=admin"
 	 * 
-	 * REF: SonarSource RSPEC-2647
+	 * REF: SonarSource RSPEC-2254
 	 * 
 	 * @param str
 	 * @return String
@@ -660,8 +965,19 @@ public class Project4 extends Project {
 			throw new AppException("Role is null");
 		}
 		
-		//get the session id to validate role
-		String sessionId = httpRequest.getRequestedSessionId();
+		/**
+		 * SOLUTION: getRequestSessionId() is not trusted and getId() should be used instead.
+		 *           getRequestSessionId() should only be called if it is used to compare against
+		 *           the session id recieved from getId()
+		 *           
+		 *           The original code is commented out below:
+		 *
+		 * //get the session id to validate role
+		 * String sessionId = httpRequest.getRequestedSessionId();
+		 */
+		HttpSession session = httpRequest.getSession();
+		String sessionId = session.getId();
+		//SOLUTION END
 		
 		try {
 			//get the role of a row in the sessions tables that matches the session id
@@ -707,6 +1023,7 @@ public class Project4 extends Project {
 		}
 	}
 	
+	
 	/**
 	 * Project 4, Milestone 3, Task 5
 	 * 
@@ -715,7 +1032,7 @@ public class Project4 extends Project {
 	 * RISK: Multiple flags can be set on cookie to prevent users from transmitting them in the clear,
 	 *       avoid XSS attack, and more.
 	 * 
-	 * REF: SonarSource RSPEC-2254
+	 * REF: https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html#defense-in-depth-techniques
 	 * 
 	 * @param str
 	 * @return String
@@ -747,6 +1064,20 @@ public class Project4 extends Project {
 			
 		//add the cookie to the response
 		Cookie prefCookie = new Cookie("pref", encodedToken);
+		/**
+		 * SOLUTION: Add flags to cookies to protect them such as HttpOnly and Secure
+		 *           which makes sure they are only sent over SSL. Another cookie protect
+		 *           header is SameSite, but it is not implemented the same in each app server.
+		 *           For example, in some you cannot set via code so you have to configure
+		 *           in the WebContent/META-INF/context.xml. The following field is added
+		 *           in the webapp to force SameSite cookie flag:
+		 *           
+		 *           <CookieProcessor sameSiteCookies="strict" />
+		 */
+		prefCookie.setHttpOnly(true);
+		prefCookie.setSecure(true);
+		//SOLUTION END
+		
 		httpResponse.addCookie(prefCookie);
 		
 		//echo pref set 
@@ -836,7 +1167,29 @@ public class Project4 extends Project {
 	 */
 
 	public String createJwt(String username) throws AppException {
-		final String SECRET="secret";
+		/**
+		 * SOLUTION: The HMAC SHA-256 used for signing the token is considered safe
+		 *           but the problem here is the selected secret is the work "secret".
+		 *           This is the default password checked in most tools so it is not
+		 *           secure. 
+		 *           
+		 *           The servlet/SessionListener class contains code to add a secure
+		 *           secret key into the session with the following code:
+		 *           session.setAttribute("secret", ServletUtilities.createSecret());
+		 *           
+		 *           With that code, a unique secret key will be availabe from in the
+		 *           session and could be used to sign the token.
+		 * 
+		 *           Of note, instead of manually building JWT, an existing framework 
+		 *           should be used to build and manage the tokens.
+		 *           
+		 *           The original code is commented out:
+		 *
+		 * final String SECRET="secret";
+		 */
+		HttpSession session = httpRequest.getSession();
+		final byte[] SECRET = (byte[]) session.getAttribute(SessionConstant.SECRET);
+		//SOLUTION END
 		
 		try {
 			//expire token in 15 minutes
@@ -875,7 +1228,14 @@ public class Project4 extends Project {
 			byte[] hmacMessage = null;
 		    try {		    	
 		    	Mac mac = Mac.getInstance("HmacSHA256");
-		        SecretKeySpec secretKeySpec = new SecretKeySpec(SECRET.getBytes(StandardCharsets.UTF_8), "HmacSHA256");
+		    	/**
+		    	 * SOLUTION: The secret in the session is already in byte[] fromat so it does not need to
+		    	 *           be converted:
+		    	 *
+		         * SecretKeySpec secretKeySpec = new SecretKeySpec(SECRET.getBytes(StandardCharsets.UTF_8), "HmacSHA256");
+		         */
+		    	SecretKeySpec secretKeySpec = new SecretKeySpec(SECRET, "HmacSHA256");
+		    	//SOLUTION END
 		        mac.init(secretKeySpec);
 		        hmacMessage = mac.doFinal(sbJWT.toString().getBytes(StandardCharsets.UTF_8));
 		    } 

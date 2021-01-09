@@ -77,10 +77,44 @@ public class SecurityFilter implements Filter {
 			 */
             // AJAX problems so add headers to relax Cross Origin issues
 			// TODO: resolve on the GUI to remove this
-			response.setHeader("Access-Control-Allow-Origin", "*");
+			/**
+			 * SOLUTION: The comment from the developer was a hint that headers were relaxed here
+			 *           because of a browser issue. That issue should be resolved.
+			 *           
+			 *           The first line is commented out and changed to the orgin of the real server address:
+			 *           
+			 *
+			 * response.setHeader("Access-Control-Allow-Origin", "*");
+			 */
+			response.setHeader("Access-Control-Allow-Origin", "http://localhost:8080");
+			//SOLUTION END
+			
 		    response.setHeader("Access-Control-Allow-Credentials", "true");
 		    response.setHeader("Access-Control-Allow-Methods", "GET");
-			
+		    
+		    /**
+		     * SOLUTION: The following 4 headers are added to the response below. A comment is add
+		     *           for each header to explain the protection. Each application is different and
+		     *           the headers may be too strict if apps are framed in other content or different
+		     *           domains share resources, so you will need to understand what each header does
+		     *           before implementing.
+		     */
+		    //click-jacking defense so content cannot be framed from a different website
+		    response.addHeader("X-Frame-Options", "SAMEORIGIN");
+
+		    //forces client to only use content-type sent from server and not try to
+		    //determine the content type by magic sniffing
+		    response.addHeader("X-Content-Type-Options", "nosniff");
+
+		    //stop caching - this could have a negative performance effect on your website
+		    //since all content will expire
+		    response.addHeader("Cache-Control", "no-store");
+			  
+		    //Content-Security-Policy
+		    //X-Frame-Options is ignored if CSF defined but some browsers ignore so just set this
+		    response.addHeader("Content-Security-Policy", "frame-ancestors 'none'");
+		    //SOLUTION END
+		    
 			
 			// throw an exception if a method other than GET or POST is sent
 			if(request.getMethod().equalsIgnoreCase("GET")) {

@@ -1,6 +1,5 @@
 package com.johnsonautoparts.servlet;
 
-import java.security.SecureRandom;
 /**
  * NO CHANGES NEEDED ON THIS CLASS FOR THE liveProject
  * 
@@ -15,8 +14,6 @@ import java.sql.SQLException;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
-
-import java.lang.IllegalStateException;
 
 import com.johnsonautoparts.db.DB;
 import com.johnsonautoparts.exception.DBException;
