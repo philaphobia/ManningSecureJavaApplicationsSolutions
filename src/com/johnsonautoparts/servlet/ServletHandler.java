@@ -122,7 +122,6 @@ public class ServletHandler extends HttpServlet {
 					.build();
 		String responseContent = jsonOk.toString();
   		response.setContentType("application/json");
-
   		
   		// check if the task param1 was sent
   		String action=null;
@@ -163,7 +162,7 @@ public class ServletHandler extends HttpServlet {
   			}
   			catch(AppException ae) {
   	  			AppLogger.log("POST loginXml caught AppException: " + ae.getPrivateMessage());
-  	  			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR );
+  	  			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
   	  			ServletUtilities.sendError(response, ae.getMessage());
   	  			return;
   			}

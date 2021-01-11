@@ -167,7 +167,7 @@ public class Project4 extends Project {
 	 * RISK: Untrusted data must not be included in the web browser since it may contain unsafe code.
 	 *       In a more complex attack, a malicious user may include JavaScript and HTML. types of attacks.
 	 *       Untrusted data displayed to the user should neutralize JavaScript and HTML. Use the OWASP
-	 *       Enocder protect to filter both.
+	 *       Encoder project to filter both.
 	 * 
 	 * REF: CMU Software Engineering Institute IDS14-J
 	 * 
@@ -185,9 +185,12 @@ public class Project4 extends Project {
 	 * 
 	 * TITLE: Avoid arbitrary file uploads
 	 * 
-	 * RISK: The referer header can be manipulated by a user and should be assumed to be tainted data.
-	 *       Since the header is untrusted, it should not be used as a reference source for making
-	 *       security decisions.
+	 * RISK: The content-type of a file upload does not guarantee the content of the data, so it cannot
+	 *       be completely trust. Additional checks of the actual metadata must be performed to validate
+	 *       the data type.
+	 *       
+	 * NOTES: Apache Tika provides this exact service by examining the bytes of data against known signatures
+	 *        an providing an improved review of the data.
 	 * 
 	 * REF: CMU Software Engineering Institute IDS56-J
 	 * CODE: https://www.tutorialspoint.com/servlets/servlets-file-uploading.htm
@@ -592,7 +595,7 @@ public class Project4 extends Project {
 	 *             - An XML note is included that everything below the line is for CSRF Guard
 	 *             - <filter> is created for CSRFGuard
 	 *             - <listener> are added
-	 *             - <servletn> for org.owasp.csrfguard.servlet.JavaScriptServlet
+	 *             - <servlet> for org.owasp.csrfguard.servlet.JavaScriptServlet
 	 *             - <servlet-mapping> for the servlet to /csrfguard
 	 *           3. The comments.jsp injects the token with the <script> tag:
 	 *             - <script src="/SecureCoding/csrfguard"></script>
@@ -722,6 +725,8 @@ public class Project4 extends Project {
 	 *       - Change the content-type (MIME Type sniffing)
 	 *       - XSS and data injection attacks
 	 *
+	 * REF: SonarSource RSPEC-5122
+	 *
 	 * IMPORTANT: No changes are made in this file. The headers can be injected anywhere the response
 	 *            is available, but care must be taken to account for every flow of the application.
 	 *            Therefore, a class which is always executed, such as a SecurityFilter, is a good option
@@ -839,7 +844,17 @@ public class Project4 extends Project {
 		// Set up the environment for creating the initial context
 		Hashtable<String, Object> env = new Hashtable<>();
 		env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
-		env.put(Context.PROVIDER_URL, "ldap://localhost:389/o=JohnsonAutoParts");
+		
+		/**
+		 * SOLUTION: The original code was connecting to the unencrypted LDAP on port 389. The encrypted
+		 *           LDAP connection should be used to ensure transmission security of crednetials.
+		 *           
+		 *           The original code is commented out:
+		 *
+		 * env.put(Context.PROVIDER_URL, "ldap://localhost:389/o=JohnsonAutoParts");
+		 */
+		env.put(Context.PROVIDER_URL, "ldasp://localhost:636/o=JohnsonAutoParts");
+		//SOLUTION
 
 		/**
 		 * SOLUTION: The anonymous connection to the LDAP is not secure and an authenticated
@@ -942,7 +957,7 @@ public class Project4 extends Project {
 	/**
 	 * Project 4, Milestone 3, Task 4
 	 * 
-	 * TITLE: Do not use getRequestedSessionId 
+	 * TITLE: Do not use getRequestSessionId 
 	 * 
 	 * RISK: The HttpSession method getRequestedSessionId() uses data from the request to extract the
 	 *       session id instead of the session id on the application server. Since a malicious user can
@@ -1122,8 +1137,6 @@ public class Project4 extends Project {
 		try {
 			String passHash = encryptPassword(password);
 			
-			//String userDbPath = webappPath.toString() + "resources/users.xml";
-			
 			//load the users xml file
 			DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
 			domFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
@@ -1165,7 +1178,10 @@ public class Project4 extends Project {
 	 * 
 	 * RISK: JWT act as an authorization token guaranteeing the users access rights
 	 *       such as an active session and the role. The JWT needs to have a strong
-	 *       signature verification so the rights can be guaranteed
+	 *       signature verification so the rights can be guaranteed. If a malicious user
+	 *       can recreate a token sent to the server with elevated privileges, they
+	 *       could gain unauthorized access to the system. This change could be made
+	 *       if the token can be changed and digitally signed.
 	 * 
 	 * @param username
 	 * @return String
