@@ -1139,8 +1139,16 @@ public class Project4 extends Project {
 			
 			//load the users xml file
 			DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
-			domFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
-			domFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "");
+			domFactory.setAttribute(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+			domFactory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+	        domFactory.setFeature("http://xml.org/sax/features/external-general-entities", false);
+	        domFactory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+	        // Disable external DTDs as well
+	        domFactory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+	        // and these as well, per Timothy Morgan's 2014 paper: "XML Schema, DTD, and Entity Attacks"
+	        domFactory.setXIncludeAware(false);
+	        domFactory.setExpandEntityReferences(false);
+	        
 			domFactory.setNamespaceAware(true);
 			DocumentBuilder builder = domFactory.newDocumentBuilder();
 			Document doc = builder.parse(userDbPath.toString());
