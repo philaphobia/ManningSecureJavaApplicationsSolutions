@@ -46,6 +46,12 @@ import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper.DefaultTypeResolverBuilder;
+import com.fasterxml.jackson.databind.ObjectMapper.DefaultTyping;
+import com.fasterxml.jackson.databind.jsontype.TypeResolverBuilder;
 
 import com.johnsonautoparts.exception.AppException;
 import com.johnsonautoparts.logger.AppLogger;
@@ -1118,6 +1124,126 @@ public class Project2 extends Project {
 	}
 	//SOLUTION END Milestone 2, Task 5
 	
+	
+	/**
+	 * Project 2, Milestone 2, Task 6
+	 * 
+	 * 
+	 * TITLE: Deserialized JSON
+	 * 
+	 * RISK: Java should not deserialize untrusted JSON without implementing some controls on the object data.
+	 *       Allowing deserialization of JSON data can lead to code execution, denial of service, and other
+	 *       attacks leveraging third-party libraries just like Java deserialization attacks.
+	 * 
+	 * REF: https://www.nccgroup.com/globalassets/our-research/us/whitepapers/2018/jackson_deserialization.pdf
+	 * 
+	 * @param str
+	 * @return Object
+	 */
+	public User deserializeJson(String data) throws AppException {
+		ObjectMapper mapper = new ObjectMapper();
+		
+		/** 
+		 * SOLUTION: The enableDefaultTyping is a dangerous method which allows any Java classes to be 
+		 *           deserialized. The method has also been deprecated.
+		 *           
+		 *           The original code is commented out below:
+		 * 
+		 * mapper.enableDefaultTyping();
+		 * 
+		 * 
+		 * Create a TypeResolver class (e.g. defined below as CustomerTypeResolver) that checks the class
+		 * of the object being deserialized against some known identifier. In the customer resolver there
+		 * is a simple check if it matches our base package com.johnsonautoparts
+		 */
+		TypeResolverBuilder<?> typeResolver = new CustomTypeResolver();
+		typeResolver.init(JsonTypeInfo.Id.CLASS, null);
+		typeResolver.inclusion(JsonTypeInfo.As.PROPERTY);
+		typeResolver.typeProperty("@CLASS");
+		mapper.setDefaultTyping(typeResolver);
+		
+		/**
+		 * 
+		 * SOLUTION: ObjectMapper configuration values for Enums from the  DeserializationFeature class.
+		 *           By default the FAIL_ON_UNKNOWN_PROPERTIES is enabled and this feature should not
+		 *           be turned off.
+		 *
+		 *           The original code is commented out and the specific object is returned:
+		 *           
+		 * //disable default behavior which has been causing problems
+		 * mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		 *
+		 */
+		
+		//deserialize the object and return
+		try {
+			/**
+			 * SOLUTION: Instead of returning a generic deserialized Object, use strong typing
+			 *           to the class you are expecting
+			 *
+			 *           The original code is commented out and replaced with a return of User class:
+			 *           
+			 * return mapper.readValue(data, Object.class);
+			 */
+			return mapper.readValue(data, User.class);
+		}
+		catch(IOException ioe) {
+			throw new AppException("deserializationJson caught IOException: " + ioe.getMessage());
+		}
+		
+	}
+	
+	
+	/**
+	 * Class for Milestone 2, Task 6
+	 * 
+	 * NO CHANGES NEEDED IN THIS FILE
+	 */
+	public class User {
+		private final int id;
+		private final String username;
+		private final String role;
+		
+		public User(int id, String username, String role) {
+			this.id = id;
+			this.username = username;
+			this.role = role;
+		}
+		
+		int getId() {
+			return this.id;
+		}
+		String getUsername() {
+			return this.username;
+		}
+		String getRole() {
+			return this.role;
+		}
+	}
+	
+	/**
+	 * SOLUTION for Milestone 2, Task 6
+	 * 
+	 * NO CHANGES NEEDED IN THIS FILE
+	 * 
+	 * Custom resolver to use with the Jackson deserializer to perform a verification
+	 * check of the class of the object to be converted.
+	 * 
+	 */
+	public class CustomTypeResolver extends DefaultTypeResolverBuilder {
+		private static final long serialVersionUID = 1L;
+
+		//only return classes which not marked as final
+		public CustomTypeResolver() {
+			super(DefaultTyping.NON_FINAL);
+		}
+
+		@Override
+		//return boolean check if the class name matches a class in our package name
+	    public boolean useForType(JavaType javaType) {
+	       return javaType.getRawClass().getName().startsWith("com.johnsonautoparts");
+	    }
+	}
 	
 	/**
 	 * The following method does not need to be assessed in the project and is only here as a helper function
