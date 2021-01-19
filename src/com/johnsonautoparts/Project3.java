@@ -32,6 +32,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.johnsonautoparts.Project3.CheckSession;
 import com.johnsonautoparts.exception.AppException;
 import com.johnsonautoparts.logger.AppLogger;
 import com.johnsonautoparts.servlet.SessionConstant;
@@ -126,7 +127,7 @@ public class Project3 extends Project {
 	 * REF: CMU Software Engineering Institute ERR01-J
 	 * 
 	 * @param filePath
-	 * @return String
+	 * @return String contents of the file only
 	 */
 	public String dataExposure(String filePath) throws AppException{
 		try {
@@ -760,12 +761,16 @@ public class Project3 extends Project {
 		 *           
 		 *           The following line is commented out:
 		 *           
-		 * Thread t = new Thread(new CheckSession(httpRequest.getSession()));
+		 * Runnable checkSessionRunnable = new CheckSession(httpRequest.getSession()); 
+		 *
+		 * Thread t = new Thread(checkSessionRunnable);
 		 * t.start();
 		 */
-		Thread t=null;
+		Runnable checkSessionRunnable = new CheckSession(httpRequest.getSession()); 
+		Thread t = null;
+		
 		try {	
-			t = new Thread(new CheckSession(httpRequest.getSession()));
+			t = new Thread(checkSessionRunnable);
 			
 			t.start();
 		}
@@ -785,9 +790,7 @@ public class Project3 extends Project {
 	 * NO CHANGES NEED TO BE PERFORMED ON THIS CLASS
 	 */
 	public static class CheckSession extends Thread {
-		private Thread worker;
 		private HttpSession session=null;
-		private Object dataId=null;
 		boolean found=false;
 		int waitTime=5000;
 		
@@ -797,12 +800,14 @@ public class Project3 extends Project {
 		
 		@Override
 		public synchronized void start() {
-			worker = new Thread(this);
+			Thread worker = new Thread(this);
 			worker.start();
 		}
 		
 		@Override
 		public void run() {
+			Object dataId=null;
+			
 			try {
 				//loop until we see the data_id attribute in the session
 				while(! found) {

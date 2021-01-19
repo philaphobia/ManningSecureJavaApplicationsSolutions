@@ -105,7 +105,7 @@ public class Project1 extends Project {
 		 * SOLUTION: Do not use untrusted input in the format string. Use
 		 *           The format pattern to rend the untrusted content as a string
 		 */
-		//return String.format(str + " passed on date %t", cal);
+		//return String.format(str + " passed on date %tF", cal);
 		return String.format("%s passed on date %tF", str, cal);
 	}
 	
@@ -384,7 +384,7 @@ public class Project1 extends Project {
 	 * @param str
 	 * @return String
 	 */
-	public String variableWidthEncoding(String str) throws AppException {
+	public String readFile(String str) throws AppException {
 		Path path=null;
 		try {
 			path = Paths.get(str);
@@ -392,8 +392,7 @@ public class Project1 extends Project {
 		catch(InvalidPathException ipe) {
 			throw new AppException("variableWidthEncoding was given and invalid path");
 		}
-		
-		String readStr = "";
+
 		
 		try (FileInputStream fios = new FileInputStream(path.toString()) ) {
 			byte[] data = new byte[1024+1];
@@ -418,14 +417,13 @@ public class Project1 extends Project {
 			 * SOLUTION: Now build the string from the data after all of the data is read and
 			 *           also define the characterset
 			 */
-			readStr = new String(data, 0, offset, StandardCharsets.UTF_8);
+			return new String(data, 0, offset, StandardCharsets.UTF_8);
 			// SOLUTION END
 		}
 		catch(IOException ioe) {
 			throw new AppException("Caught exception reading file: " + ioe.getMessage());
 		}
 		
-		return readStr;
 	}
 	
 	
@@ -444,7 +442,7 @@ public class Project1 extends Project {
 	 * @param base64Str
 	 * @return BigInteger
 	 */
-	public BigInteger encodeNonCharacter(String base64Str) {
+	public BigInteger decodeBase64(String base64Str) {
 		//decode base64 to String representation of BigInt
 		byte[] decodedBytes = Base64.getDecoder().decode(base64Str);
 		
@@ -494,7 +492,7 @@ public class Project1 extends Project {
 	 * @param str
 	 * @return String
 	 */
-	public String doubleEncoding(String str) {
+	public String cleanBadHTMLTags(String str) {
 		/**
 		 * SOLUTION: We will not use the matcher() and find() to look for malicious characters
 		 *           We will comment out all of the previous code and use another library.
@@ -543,7 +541,7 @@ public class Project1 extends Project {
 	 * @param fileName
 	 * @return String
 	 */
-	public String fileEncoding(String fileName) throws AppException {
+	public String getFileContents(String fileName) throws AppException {
 		try (FileInputStream fis = new FileInputStream(fileName)) {
 			try( DataInputStream dis = new DataInputStream(fis) ) {
 				byte[] data = new byte[1024];

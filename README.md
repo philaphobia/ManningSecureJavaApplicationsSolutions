@@ -6,6 +6,14 @@ https://github.com/philaphobia/ManningSecureJavaApplications
 
 The code is this release contains comments with the solutions. Only review this code if you are interested in the solutions.
 
+
+## Java version
+The program was developed on Java version 1.8, so you should download the latest JRE (and JDK if you want to build) to make sure you can work with the program in Eclipse.
+
+## Application server
+The program was developed and tested with Apache Tomcat 8.5. If you plan on deploying and testing the (app not required for the project), make sure you have the latest version of Tomcat 8.5. The webapp was
+ tested with a default Apache Tomcat and can simply be deployed by copying the WAR/SecureCoding.war file to the webapps directory under the Tomcat directory.
+
 ## Folder structure is as follows:
    * lib - additional libraries needed to build webapp
    * src - source code
