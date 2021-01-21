@@ -1196,11 +1196,8 @@ public class Project2 extends Project {
 	 * can lead to code execution, denial of service, and other attacks
 	 * leveraging third-party libraries just like Java deserialization attacks.
 	 * 
-	 * REF:
-	 * https://www.nccgroup.com/globalassets/our-research/us/whitepapers/2018/jackson_deserialization.pdf
-	 * 
-	 * @param str
-	 * @return Object
+	 * @param data String of the json to deserialize
+	 * @return User 
 	 */
 	public User deserializeJson(String data) throws AppException {
 		ObjectMapper mapper = new ObjectMapper();
@@ -1229,7 +1226,7 @@ public class Project2 extends Project {
 
 		/**
 		 * 
-		 * SOLUTION: ObjectMapper configuration values for Enums from the
+		 * SOLUTION: ObjectMapper configuration accepts values for Enums from the
 		 * DeserializationFeature class. By default the
 		 * FAIL_ON_UNKNOWN_PROPERTIES is enabled and this feature should not be
 		 * turned off.
