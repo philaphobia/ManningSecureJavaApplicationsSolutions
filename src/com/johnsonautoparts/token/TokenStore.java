@@ -10,17 +10,17 @@ import com.johnsonautoparts.exception.AppException;
 
 public interface TokenStore {
 
-  String create(Token token) throws AppException;
+	String create(Token token) throws AppException;
 
-  class Token {
-    public final Instant expiry;
-    public final String username;
-    public final Map<String, String> attributes;
+	class Token {
+		public final Instant expiry;
+		public final String username;
+		public final Map<String, String> attributes;
 
-    public Token(Instant expiry, String username) {
-      this.expiry = expiry;
-      this.username = username;
-      this.attributes = new ConcurrentHashMap<>();
-    }
-  }
+		public Token(Instant expiry, String username) {
+			this.expiry = expiry;
+			this.username = username;
+			this.attributes = new ConcurrentHashMap<>();
+		}
+	}
 }
