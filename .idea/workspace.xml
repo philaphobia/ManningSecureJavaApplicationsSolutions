@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="728b4cf3-9d5b-4c29-b0ab-29bc54ae52df" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/WAR/SecureCoding.war" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/WEB-INF/classes/com/johnsonautoparts/Project.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/WEB-INF/classes/com/johnsonautoparts/Project1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/WEB-INF/classes/com/johnsonautoparts/Project2$CustomTypeResolver.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/WEB-INF/classes/com/johnsonautoparts/Project2$MapVariableResolver.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/WEB-INF/classes/com/johnsonautoparts/Project2$User.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/WEB-INF/classes/com/johnsonautoparts/Project2$WhitelistClass.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/WEB-INF/classes/com/johnsonautoparts/Project2$WhitelistObjectInputStream.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/WEB-INF/classes/com/johnsonautoparts/Project2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/WEB-INF/classes/com/johnsonautoparts/Project3$CheckSession.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/WEB-INF/classes/com/johnsonautoparts/Project3.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/WEB-INF/classes/com/johnsonautoparts/Project4$MapVariableResolver.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/WEB-INF/classes/com/johnsonautoparts/Project4.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/WEB-INF/classes/com/johnsonautoparts/db/DB.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/WEB-INF/classes/com/johnsonautoparts/exception/AppException.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/WEB-INF/classes/com/johnsonautoparts/exception/DBException.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/WEB-INF/classes/com/johnsonautoparts/logger/AppLogger.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/WEB-INF/classes/com/johnsonautoparts/servlet/ContextListener.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/WEB-INF/classes/com/johnsonautoparts/servlet/RequestListener.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/WEB-INF/classes/com/johnsonautoparts/servlet/SecurityFilter.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/WEB-INF/classes/com/johnsonautoparts/servlet/ServletHandler.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/WEB-INF/classes/com/johnsonautoparts/servlet/ServletUtilities.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/WEB-INF/classes/com/johnsonautoparts/servlet/SessionConstant.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/WEB-INF/classes/com/johnsonautoparts/servlet/SessionListener.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/WEB-INF/classes/com/johnsonautoparts/token/SignedJwtTokenStore.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/WEB-INF/classes/com/johnsonautoparts/token/TokenStore$Token.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/WEB-INF/classes/com/johnsonautoparts/token/TokenStore.class" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1nkpIfacoApqTsL1dSTNkNmno5z" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="728b4cf3-9d5b-4c29-b0ab-29bc54ae52df" name="Default Changelist" comment="" />
+      <created>1611943897438</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1611943897438</updated>
+    </task>
+    <servers />
+  </component>
+</project>
