@@ -285,7 +285,7 @@ public class Project2 extends Project {
 			/*
 			 * SOLUTION: remove special characters and potentially dangerous
 			 * characters such as periods which could be part of a double dot
-			 * operating system attack. Whitelist a specific set of alphanumeric
+			 * operating system attack. Accept a specific set of alphanumeric
 			 * characters and replace them with the underscore character
 			 */
 			String sanitizedFilename = fileName.replaceAll("[^A-Za-z0-9]", "_");
@@ -344,7 +344,7 @@ public class Project2 extends Project {
 		 *
 		 * return dirty.replaceAll("\\.\\." + File.separator,"_");
 		 */
-		String whitelistDirectory = "/uploads";
+		String acceptDirectory = "/uploads";
 		int symlinkDepth = 1; // set an explicit number of symbolic links
 								// allowed to follow
 
@@ -366,7 +366,7 @@ public class Project2 extends Project {
 		// check if the file is in our safe path
 		String canonicalPath = f.getCanonicalPath();
 
-		if (canonicalPath.indexOf(whitelistDirectory) != 0) {
+		if (canonicalPath.indexOf(acceptDirectory) != 0) {
 			throw new IOException("canonical path not in our safe directory");
 		}
 
@@ -604,7 +604,7 @@ public class Project2 extends Project {
 
 			/**
 			 * SOLUTION: Another possible solution offered by CMU SEI IDS07-J is
-			 * to create an explicit whitelist of coomands allowed. For example
+			 * to create an explicit accept list of coomands allowed. For example
 			 * the method would use a switch to pick the program
 			 * 
 			 * switch(cmd) { case 'list': execCmd = "ls"; break;
@@ -668,7 +668,7 @@ public class Project2 extends Project {
 		 * print, so only allow basic alphanumeric
 		 */
 		if (!printMessage.matches("[\\w]*")) {
-			// String does not match whitelist characters
+			// String does not match accepted characters
 			throw new IllegalArgumentException(
 					"evalScript was passed illegal characters");
 		}
@@ -1055,17 +1055,17 @@ public class Project2 extends Project {
 	 */
 	/*
 	 * SOLUTION: Instead of returning a generic Object, the method now returns
-	 * our expected WhitelistClass. Additional information is provided below in
+	 * our expected listClass. Additional information is provided below in
 	 * the next SOLUTION section. At the end of the the deserializeObject method
-	 * we define a new class WhitelistObjectInputStream and WhitelistClass which
+	 * we define a new class AcceptListObjectInputStream and AcceptListClass which
 	 * are used in the solution
 	 * 
 	 * The following line is commented out and replace with an explicit return
-	 * of a WhitelistClass
+	 * of a AcceptListClass
 	 *
 	 * public Object deserializeObject(String base64Str) throws AppException {
 	 **/
-	public WhitelistClass deserializeObject(String base64Str)
+	public AcceptListClass deserializeObject(String base64Str)
 			throws AppException {
 		// SOLUTION END
 		if (base64Str == null) {
@@ -1092,7 +1092,7 @@ public class Project2 extends Project {
 			 * an ObjectInputStream and overrides the method resolveClass to
 			 * provide read ahead of the object being deserialized before the
 			 * readObject() method is called. Using this technique, you can
-			 * compare the class name to a whitelist of the class you are
+			 * compare the class name to an accept list of the class you are
 			 * expecting to deserialize. If the object being deserialized is not
 			 * an instance of the expected class, the method throws an
 			 * exception.
@@ -1101,17 +1101,17 @@ public class Project2 extends Project {
 			 * 
 			 * The previous code is commented out which used the standard
 			 * ObjectInputStream and replaced with out custom
-			 * WhitelistObjectInputStream which also include a parameter passed
-			 * with the expected class to be deserialized - WhitelistClass. If
+			 * AcceptListObjectInputStream which also include a parameter passed
+			 * with the expected class to be deserialized - AcceptListClass. If
 			 * the expected class is not the object deserialized, then the
-			 * WhitelistObjectInputStream thows an InvalidClassException.
+			 * AcceptListObjectInputStream thows an InvalidClassException.
 			 * 
 			 * try (ObjectInputStream ois = new ObjectInputStream(bais)) {
 			 */
-			try (WhitelistObjectInputStream ois = new WhitelistObjectInputStream(
-					bais, WhitelistClass.class)) {
+			try (AcceptListObjectInputStream ois = new AcceptListObjectInputStream(
+					bais, AcceptListClass.class)) {
 				// SOlUTION END
-				return (WhitelistClass) ois.readObject();
+				return (AcceptListClass) ois.readObject();
 			} catch (StreamCorruptedException sce) {
 				throw new AppException(
 						"deserializedObject caugh stream exception: "
@@ -1132,29 +1132,29 @@ public class Project2 extends Project {
 	/**
 	 * SOLUTION for Milestone 2, Task 5
 	 * 
-	 * The custom WhitelistObjectInput stream is used to override resolveClass()
+	 * The custom AcceptListObjectInput stream is used to override resolveClass()
 	 * method to give us a chance to check the type of object being deserialized
 	 * before the readObject is called and a malicious serialized payload is
 	 * executed
 	 * 
 	 */
-	private static class WhitelistObjectInputStream extends ObjectInputStream {
-		private Class<?> whitelistClass;
+	private static class AcceptListObjectInputStream extends ObjectInputStream {
+		private Class<?> acceptListClass;
 
-		public WhitelistObjectInputStream(InputStream inputStream,
-				Class<?> whitelistClass) throws IOException {
+		public AcceptListObjectInputStream(InputStream inputStream,
+				Class<?> acceptListClass) throws IOException {
 			super(inputStream);
 
-			this.whitelistClass = whitelistClass;
+			this.acceptListClass = acceptListClass;
 		}
 
 		/**
-		 * Only deserialize instances of our expected whitelisted class
+		 * Only deserialize instances of our expected accept list class
 		 */
 		@Override
 		protected Class<?> resolveClass(ObjectStreamClass desc)
 				throws IOException, ClassNotFoundException {
-			if (!desc.getName().equals(whitelistClass.getName())) {
+			if (!desc.getName().equals(acceptListClass.getName())) {
 				throw new InvalidClassException(
 						"Unauthorized deserialization attempt", desc.getName());
 			}
@@ -1166,11 +1166,11 @@ public class Project2 extends Project {
 	 * Fictitious class used to demonstrate for deserialization
 	 * 
 	 */
-	public class WhitelistClass {
+	public class AcceptListClass {
 		private String ssn;
 		private String sessionId;
 
-		public WhitelistClass(String ssn, String sessionId) {
+		public AcceptListClass(String ssn, String sessionId) {
 			this.ssn = ssn;
 			this.sessionId = sessionId;
 		}

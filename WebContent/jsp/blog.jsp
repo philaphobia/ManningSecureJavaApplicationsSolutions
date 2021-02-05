@@ -7,8 +7,8 @@
 	 * 
 	 * TITLE: Sanitize HTML when tags are needed
 	 * 
-	 * RISK: If the application allows untrusted data to include HTML, then a whitelist of accepted tags
-	 *       should be enforced. Blacklisting will not help and the tags allowed should be very limited
+	 * RISK: If the application allows untrusted data to include HTML, then an accept list tags
+	 *       should be enforced. Denying will not help and the tags allowed should be very limited
 	 *       to avoid tricky malicious users from bypassing the expected controls.
 	 * 
 	 * REF: OWASP XSS Cheat Sheet Rule #6
@@ -45,7 +45,7 @@
 	 	 *           santize characters that could be bad, sometimes HTML is allowed. In these cases,
 	 	 *           the best solution is to leverage a proven library. As the imports suggest, we will
 	 	 *           use the OWASP HTML Sanitizer to create a policy of the allowed HTML tags. The
-	 	 *           content will then be filtered to only allow the whitelisted tags before placing
+	 	 *           content will then be filtered to only allow the accepted tags before placing
 	 	 *           the data into the browser.
 	 	 */
 		%>
@@ -56,7 +56,7 @@
 			
 			//only work on data if it is not null
 			if(blogData != null) {
-				//use OWASP HTML sanitizer to limit elements to whitelist
+				//use OWASP HTML sanitizer to limit elements to accept 
 				PolicyFactory policy = new HtmlPolicyBuilder()
 					.allowElements("p")
 			   	 	.allowElements("table")

@@ -366,8 +366,9 @@ public class Project4 extends Project {
 	 * 
 	 * TITLE: Sanitize HTML when tags are needed
 	 * 
-	 * RISK: If the application allows untrusted data to include HTML, then a
-	 * whitelist of accepted tags should be enforced. Blacklisting will not help
+	 * RISK: If the application allows untrusted data to include HTML, then an 
+	 * allow (formerly known as whitelisting) of accepted tags should be enforced. 
+	 * Denying (formerly known as blacklisting) will not help
 	 * and the tags allowed should be very limited to avoid tricky malicious
 	 * users from bypassing the expected controls.
 	 * 
@@ -405,7 +406,7 @@ public class Project4 extends Project {
 
 		// only work on data if it is not null
 		if (blogEntry != null) {
-			// use OWASP HTML sanitizer to limit elements to whitelist
+			// use OWASP HTML sanitizer to limit elements to allow
 			PolicyFactory policy = new HtmlPolicyBuilder().allowElements("p")
 					.allowElements("table").allowElements("div")
 					.allowElements("tr").allowElements("td").toFactory();
@@ -502,7 +503,7 @@ public class Project4 extends Project {
 	 * security headers if allowed or other attacks which use end of line
 	 * characters (called a split response header) cause the browser to receive
 	 * and process two different responses. The normal sanitization and
-	 * filtering is usually insufficient, and a whitelist of acceptable values
+	 * filtering is usually insufficient, and  an accept list of valid values
 	 * would be the best solution.
 	 * 
 	 * REF: SonarSource RSPEC-5167
@@ -515,16 +516,16 @@ public class Project4 extends Project {
 		 * SOLUTION: Allowing unsanitized data into the headers is very
 		 * dangerous and performing filtering with regex and other methods we
 		 * used in other milestones may not even be safe. The recommendation via
-		 * RSPEC-5167 is to only use a whitelist of acceptable strings.
+		 * RSPEC-5167 is to only use allow acceptable strings.
 		 * 
 		 * The original code is commented out:
 		 *
 		 * httpResponse.addHeader("X-Header", header);
 		 */
-		String[] whitelistHeaders = {"distinguish", "resolved"};
+		String[] acceptHeaders = {"distinguish", "resolved"};
 
-		for (String whitelistHeader : whitelistHeaders) {
-			if (whitelistHeader.equals(header)) {
+		for (String acceptHeader : acceptHeaders) {
+			if (acceptHeader.equals(header)) {
 				httpResponse.addHeader("X-Header", header);
 				return header;
 			}
@@ -532,7 +533,7 @@ public class Project4 extends Project {
 
 		// no header matched so throw an exception
 		throw new AppException(
-				"addHeader requested header which is not in whitelist");
+				"addHeader requested header which is not in the accept list");
 		// SOLUTION END
 	}
 
@@ -614,7 +615,7 @@ public class Project4 extends Project {
 		 * null) { throw new AppException("comments() cannot retrieve referer
 		 * header"); }
 		 *
-		 * //check whitelist referer comments form
+		 * //check accept list referer comments form
 		 * if(!referer.contains(REFERER_COMMENTS)) { throw new
 		 * AppException("comments() cannot validate referer header"); }
 		 */
@@ -690,16 +691,16 @@ public class Project4 extends Project {
 			/**
 			 * SOLUTION: Similar to avoiding header injection, allowing
 			 * redirects to uncontrolled URLs is unsafe. RSPEC-5146 recommends
-			 * using an explicit whitelist for the URL which all redirect
+			 * using an explicit accept list for the URL which all redirect
 			 * locations must contain.
 			 * 
-			 * The original code is commented out and replaced with a whitelest:
+			 * The original code is commented out and replaced with an accept lest:
 			 *
 			 * httpResponse.sendRedirect(location);
 			 */
-			String whiteList = "http://localhost:8080/SecureCoding";
+			String acceptList = "http://localhost:8080/SecureCoding";
 
-			if (location.startsWith(whiteList)) {
+			if (location.startsWith(acceptList)) {
 				httpResponse.sendRedirect(location);
 			} else {
 				throw new IOException("redirectUser received an illegal URL");
@@ -913,7 +914,7 @@ public class Project4 extends Project {
 		 * search query they should be checked for characters which are not
 		 * accepted. Due to the dangers of LDAP injection, attempting to filter
 		 * out unwanted characters may be too dangerous so just check for a
-		 * known good whitelist. In this solution, we use the regex strings of
+		 * known accept list. In this solution, we use the regex strings of
 		 * \s which matches whitespace and \w which matches the upper and lower
 		 * case letters including number [a-zA-Z_0-9]
 		 */
