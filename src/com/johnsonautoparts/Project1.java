@@ -324,7 +324,7 @@ public class Project1 extends Project {
 	 * @param str
 	 * @return String
 	 */
-	public String regexBypass(String str) {
+	public String regexClean(String str) {
 		String cleanText = str.toLowerCase(Locale.ENGLISH);
 
 		/**
