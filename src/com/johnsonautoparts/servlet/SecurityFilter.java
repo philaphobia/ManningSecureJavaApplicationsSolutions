@@ -15,6 +15,8 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.johnsonautoparts.Project4;
+import com.johnsonautoparts.exception.AppException;
 import com.johnsonautoparts.logger.AppLogger;
 
 /**
@@ -144,6 +146,18 @@ public class SecurityFilter implements Filter {
 						"Unknown request verb used: " + request.getMethod());
 
 				return;
+			}
+			
+			/**
+			 * No changes need in projects for this header
+			 */
+			//add x-header to distinguish since passed filter
+			Project4 project4 = new Project4(null, request, response);
+			try {
+				project4.addHeader("distinguish");
+			} catch(AppException ae) {
+				AppLogger.log("postComments() failed to close connection: "
+						+ ae.getMessage());
 			}
 
 			// no errors detected so forward to the next filter
