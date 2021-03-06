@@ -1,15 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="728b4cf3-9d5b-4c29-b0ab-29bc54ae52df" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.name" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.name" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SecureCodingApp.iml" beforeDir="false" afterPath="$PROJECT_DIR$/SecureCodingApp.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/WAR/SecureCoding.war" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/WebContent/WEB-INF/classes/com/johnsonautoparts/Project.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/WebContent/WEB-INF/classes/com/johnsonautoparts/Project1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/WEB-INF/classes/com/johnsonautoparts/Project2$AcceptListClass.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/WEB-INF/classes/com/johnsonautoparts/Project2$AcceptListObjectInputStream.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/WebContent/WEB-INF/classes/com/johnsonautoparts/Project2$CustomTypeResolver.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/WebContent/WEB-INF/classes/com/johnsonautoparts/Project2$MapVariableResolver.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/WebContent/WEB-INF/classes/com/johnsonautoparts/Project2$User.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebContent/WEB-INF/classes/com/johnsonautoparts/Project2$WhitelistClass.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebContent/WEB-INF/classes/com/johnsonautoparts/Project2$WhitelistObjectInputStream.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/WebContent/WEB-INF/classes/com/johnsonautoparts/Project2.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/WebContent/WEB-INF/classes/com/johnsonautoparts/Project3$CheckSession.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/WebContent/WEB-INF/classes/com/johnsonautoparts/Project3.class" beforeDir="false" />
@@ -47,6 +53,9 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="project.structure.last.edited" value="Artifacts" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.0" />
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
