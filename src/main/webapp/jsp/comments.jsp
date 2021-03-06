@@ -9,7 +9,7 @@
  * RISK: Untrusted data must not be included in the web browser since it may contain unsafe code.
  *       In a more complex attack, a malicious user may include JavaScript and HTML. types of attacks.
  *       Untrusted data displayed to the user should neutralize JavaScript and HTML. Use the OWASP
- *       Enocder protect to filter both.
+ *       Encoder protect to filter both.
  * 
  * REF: CMU Software Engineering Institute IDS14-J
  * 
@@ -30,7 +30,7 @@
 		<tr><td>Please verify your comment before submission:</td></tr>
 		<% 
 		    /**
-		     * SOLUTION: Instead of using the GET paramater without filtering we need to
+		     * SOLUTION: Instead of using the GET parameter without filtering we need to
 		     *           use the Encoder twice. OWASP Encoder project recommends sanitizing
 		     *           for HTML first and then performing a second pass to sanitize
 		     *           JavaScript

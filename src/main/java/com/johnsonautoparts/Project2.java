@@ -90,7 +90,7 @@ public class Project2 extends Project {
 	 * 
 	 * REF: CMU Software Engineering Institute IDS00-J
 	 * 
-	 * @param query
+	 * @param idStr
 	 * @return String
 	 **/
 	public int dbInventory(String idStr) throws AppException {
@@ -99,7 +99,7 @@ public class Project2 extends Project {
 		}
 
 		try {
-			/**
+			/*
 			 * SOLUTION: The id parameter comes directly from the request
 			 * parameter in ServletHandler and passed to the method without any
 			 * sanitization. The id parameter is then placed directly into a SQL
@@ -145,14 +145,14 @@ public class Project2 extends Project {
 						return rs.getInt(1);
 					} else {
 						throw new AppException(
-								"dbInventroy did not return any results");
+								"dbInventory did not return any results");
 					}
 				} // end resultset
 			} // end statement
 
 		} catch (SQLException se) {
 			throw new AppException(
-					"dbInventroy caught SQLException: " + se.getMessage());
+					"dbInventory caught SQLException: " + se.getMessage());
 		} finally {
 			try {
 				connection.close();
@@ -186,7 +186,7 @@ public class Project2 extends Project {
 
 		try {
 
-			/**
+			/*
 			 * SOLUTION: As we learned in the previous task, PreparedStatement
 			 * helps protect against SQL injection. A common problem is
 			 * developers use PreparedStatement but still use the variable in a
@@ -233,7 +233,7 @@ public class Project2 extends Project {
 		}
 	}
 
-	/**
+	/*
 	 * Project 2, Milestone 1, Task 3
 	 * 
 	 * TITLE: Safe naming for files
@@ -245,7 +245,7 @@ public class Project2 extends Project {
 	 * 
 	 * REF: CMU Software Engineering Institute IDS50-J
 	 * 
-	 * @param str
+	 * @param fileName
 	 * @return String
 	 */
 	public void createFile(String fileName) throws AppException {
@@ -274,7 +274,7 @@ public class Project2 extends Project {
 					SessionConstant.SESSION_DATA + " does not contain text");
 		}
 
-		/**
+		/*
 		 * For the current task, do not worry about fixing makeSafePath() This
 		 * is an exercise for the next task. The current task is to only focus
 		 * on creating a safe filename
@@ -289,7 +289,7 @@ public class Project2 extends Project {
 			 * characters and replace them with the underscore character
 			 */
 			String sanitizedFilename = fileName.replaceAll("[^A-Za-z0-9]", "_");
-			// SOlUTION END
+			// SOLUTION END
 
 			// check the path
 			safePathStr = makeSafePath(tempPath + sanitizedFilename);
@@ -313,7 +313,7 @@ public class Project2 extends Project {
 
 	}
 
-	/**
+	/*
 	 * Project 2, Milestone 1, Task 4
 	 * 
 	 * TITLE: Protecting file paths
@@ -325,11 +325,11 @@ public class Project2 extends Project {
 	 * 
 	 * REF: CMU Software Engineering Institute FIO16-J
 	 * 
-	 * @param str
+	 * @param dirty
 	 * @return String
 	 */
 	public String makeSafePath(String dirty) throws IOException {
-		/**
+		/*
 		 * SOLUTION: The key to protecting paths is to first use
 		 * Canonicalization. A malicious user may still be able to pass special
 		 * characters or redirect the file to special nodes on the operating
@@ -382,10 +382,10 @@ public class Project2 extends Project {
 		// return the canonical path of the file
 		return canonicalPath;
 
-		// SOlUTION END
+		// SOLUTION END
 	}
 
-	/**
+	/*
 	 * Project 2, Milestone 1, Task 5
 	 * 
 	 * TITLE: Safe extraction of compressed files
@@ -398,7 +398,7 @@ public class Project2 extends Project {
 	 * 
 	 * REF: CMU Software Engineering Institute IDS04-J
 	 * 
-	 * @param str
+	 * @param fileName
 	 * @return String
 	 */
 	public String unzip(String fileName) throws AppException {
@@ -411,7 +411,7 @@ public class Project2 extends Project {
 		try {
 			zipPath = Paths.get("temp", "zip", fileName);
 		} catch (InvalidPathException ipe) {
-			throw new AppException("unzip passed an invalide filename");
+			throw new AppException("unzip passed an invalid filename");
 		}
 
 		try (FileInputStream fis = new FileInputStream(zipPath.toString())) {
@@ -419,7 +419,7 @@ public class Project2 extends Project {
 					new BufferedInputStream(fis))) {
 				ZipEntry entry;
 
-				/**
+				/*
 				 * SOLUTION: A zip bomb can exhaust system resources by forging
 				 * the real file size or extracting too many files. We need
 				 * variables to track both of these so will be using entries and
@@ -435,7 +435,7 @@ public class Project2 extends Project {
 					int count;
 					byte data[] = new byte[BUFFER];
 
-					/**
+					/*
 					 * SOLUTION: The getSize() entry can be tricked into
 					 * reporting a false size so we cannot use it. We will
 					 * instead track the data size extracted with a running sum
@@ -463,7 +463,7 @@ public class Project2 extends Project {
 						Files.createDirectory(p);
 						continue;
 					}
-					// SOUTION END
+					// SOLUTION END
 
 					// output file is path plus entry
 					Path entryPath = null;
@@ -480,7 +480,7 @@ public class Project2 extends Project {
 						try (BufferedOutputStream dest = new BufferedOutputStream(
 								fos, BUFFER)) {
 
-							/**
+							/*
 							 * SOLUTION: we need to track the size of data
 							 * extracted in the while
 							 * 
@@ -502,7 +502,7 @@ public class Project2 extends Project {
 
 							zis.closeEntry();
 
-							/**
+							/*
 							 * SOLUTION: need the check for the number of files
 							 * and data size extracted
 							 */
@@ -544,7 +544,7 @@ public class Project2 extends Project {
 		return zipPath.toString();
 	}
 
-	/**
+	/*
 	 * SOLUTION for Milestone 1, Task 5
 	 * 
 	 * Adding the following method for task 5
@@ -575,7 +575,7 @@ public class Project2 extends Project {
 	}
 	// SOLUTION Milestone 1, Task 5 END
 
-	/**
+	/*
 	 * Project 2, Milestone 1, Task 6
 	 * 
 	 * TITLE: Sanitize data used in exec()
@@ -590,7 +590,7 @@ public class Project2 extends Project {
 	 */
 	public String exec(String cmd) throws AppException {
 		try {
-			/**
+			/*
 			 * SOLUTION: sanitize the cmd to only allow a specific set of
 			 * characters avoid allowing characters such as periods to stop ..
 			 * attacks. This is just a simple solution and still could open the
@@ -602,9 +602,9 @@ public class Project2 extends Project {
 			}
 			// SOLUTION END
 
-			/**
+			/*
 			 * SOLUTION: Another possible solution offered by CMU SEI IDS07-J is
-			 * to create an explicit accept list of coomands allowed. For example
+			 * to create an explicit accept list of commands allowed. For example
 			 * the method would use a switch to pick the program
 			 * 
 			 * switch(cmd) { case 'list': execCmd = "ls"; break;
@@ -639,27 +639,27 @@ public class Project2 extends Project {
 			throw new AppException("exec caught IO error: " + ioe.getMessage());
 		} catch (InterruptedException ie) {
 			throw new AppException(
-					"exec caught interupted error: " + ie.getMessage());
+					"exec caught interrupted error: " + ie.getMessage());
 		}
 	}
 
-	/**
+	/*
 	 * Project 2, Milestone 1, Task 7
 	 * 
 	 * TITLE: Sanitize data used in JavaScript engine
 	 * 
-	 * RISK: The ScriptEnginer in Java provides a JavaScript engine for
+	 * RISK: The ScriptEngine in Java provides a JavaScript engine for
 	 * interpreting code and executing. Passing untrusted text with sanitization
 	 * could allow and attacker to run code which executes on the operating
 	 * system in the internal network.
 	 * 
 	 * REF: CMU Software Engineering Institute IDS52-J
 	 * 
-	 * @param cmd
+	 * @param printMessage
 	 * @return String
 	 */
 	public String evalScript(String printMessage) throws AppException {
-		/**
+		/*
 		 * SOLUTION: Since code execution of untrusted user data is a critical
 		 * risk, the data passed to the execution engine must be thoroughly
 		 * check to for the type of data expected.
@@ -674,7 +674,7 @@ public class Project2 extends Project {
 		}
 		// SOLUTION END
 
-		/**
+		/*
 		 * SOLUTION: In the exception cases where special characters or other
 		 * possible data which cannot be filtered out with a basic regex
 		 * expression, you should use the lessons learned in the previous
@@ -709,11 +709,11 @@ public class Project2 extends Project {
 			}
 		} catch (ScriptException se) {
 			throw new AppException(
-					"evalScript caugth ScriptException: " + se.getMessage());
+					"evalScript caugtht ScriptException: " + se.getMessage());
 		}
 	}
 
-	/**
+	/*
 	 * Project 2, Milestone 2, Task 1
 	 * 
 	 * TITLE: Prevent XML injection attacks
@@ -725,11 +725,11 @@ public class Project2 extends Project {
 	 * 
 	 * REF: CMU Software Engineering Institute IDS16-J
 	 * 
-	 * @param str
+	 * @param partQuantity
 	 * @return String
 	 */
 	public String createXML(String partQuantity) throws AppException {
-		/**
+		/*
 		 * SOLUTION: similar to avoid SQL injection attacks, avoiding XML can
 		 * uses strong typing to check if the data is of the expected type.
 		 * 
@@ -772,7 +772,7 @@ public class Project2 extends Project {
 		return (doc.toString());
 	}
 
-	/**
+	/*
 	 * Project 2, Milestone 2, Task 2
 	 * 
 	 * TITLE: Validate with XML schema
@@ -782,11 +782,11 @@ public class Project2 extends Project {
 	 * 
 	 * REF: CMU Software Engineering Institute IDS16-J
 	 * 
-	 * @param str
+	 * @param xml
 	 * @return String
 	 */
 	public Document validateXML(String xml) throws AppException {
-		/**
+		/*
 		 * SOLUTION: comment out the basic factory which did not define a schema
 		 * namespace
 		 * 
@@ -802,7 +802,7 @@ public class Project2 extends Project {
 		// demonstration
 		// purposes to work with XML schema validation
 		try {
-			/**
+			/*
 			 * SOLUTION: The existing code did not use an XSD to validate the
 			 * XML.
 			 * 
@@ -813,7 +813,7 @@ public class Project2 extends Project {
 			 * builder.parse(is);
 			 */
 
-			/**
+			/*
 			 * SOLUTION: The follow code will validate the content of the data
 			 * in the XML against the schema defined in the XSD
 			 */
@@ -845,7 +845,7 @@ public class Project2 extends Project {
 		}
 	}
 
-	/**
+	/*
 	 * Project 2, Milestone 2, Task 3
 	 * 
 	 * TITLE: Protect against XML External Entity (XEE) attacks
@@ -856,7 +856,7 @@ public class Project2 extends Project {
 	 * 
 	 * REF: CMU Software Engineering Institute IDS17-J
 	 * 
-	 * @param str
+	 * @param xml
 	 * @return String
 	 */
 	public Document parseXML(String xml) throws AppException {
@@ -866,7 +866,7 @@ public class Project2 extends Project {
 		// demonstration
 		// purposes to configure the parse to avoid XEE attacks
 		try {
-			/**
+			/*
 			 * SOLUTION: There are several methods for blocking XEE attacks and
 			 * they all rely on setting features in the DocumentBuilderFactory
 			 * before the new DocumentBuilder method is called.
@@ -909,7 +909,7 @@ public class Project2 extends Project {
 		}
 	}
 
-	/**
+	/*
 	 * Project 2, Milestone 2, Task 4
 	 * 
 	 * TITLE: Avoid XPath injection
@@ -923,7 +923,7 @@ public class Project2 extends Project {
 	 * Source code from:
 	 * https://wiki.sei.cmu.edu/confluence/display/java/IDS53-J.+Prevent+XPath+Injection
 	 * 
-	 * @param str
+	 * @param userPass
 	 * @return boolean
 	 */
 	public boolean xpathLogin(String userPass) throws AppException {
@@ -934,7 +934,7 @@ public class Project2 extends Project {
 					"webapps", httpRequest.getServletContext().getContextPath(),
 					"resources", "users.xml");
 		} catch (InvalidPathException ipe) {
-			throw new AppException("xpathLogin passed and invalide path");
+			throw new AppException("xpathLogin passed and invalid path");
 		}
 
 		// make sure the string is not null
@@ -943,8 +943,7 @@ public class Project2 extends Project {
 		}
 
 		try {
-			// split the user and password string which was concatenated with a
-			// colon
+			// split the user and password string which was concatenated with a colon
 			// we would normally do further checks on the values but are
 			// limiting check here to reduce the code
 			String[] args = userPass.split(":");
@@ -958,7 +957,7 @@ public class Project2 extends Project {
 			DocumentBuilder builder = domFactory.newDocumentBuilder();
 			Document doc = builder.parse(userDbPath.toString());
 
-			/**
+			/*
 			 * SOLUTION: To protect XPath queries, we can use defensive measure
 			 * similar to SQL injection to not allow the direct injection of
 			 * user controlled parameters into a query. Instead, the query is
@@ -1010,7 +1009,7 @@ public class Project2 extends Project {
 		}
 	}
 
-	/**
+	/*
 	 * SOLUTION class for Milestone 2, Task 4 custom class to allow variables to
 	 * be injected into path expression
 	 * 
@@ -1035,7 +1034,7 @@ public class Project2 extends Project {
 	}
 	// SOLUTION END FOR MILESTONE 2, TASK4
 
-	/**
+	/*
 	 * Project 2, Milestone 2, Task 5
 	 * 
 	 * 
@@ -1050,7 +1049,7 @@ public class Project2 extends Project {
 	 * 
 	 * REF: CMU Software Engineering Institute SER12-J
 	 * 
-	 * @param str
+	 * @param base64Str
 	 * @return String
 	 */
 	/*
@@ -1087,7 +1086,7 @@ public class Project2 extends Project {
 		try (ByteArrayInputStream bais = new ByteArrayInputStream(
 				decodedBytes)) {
 
-			/**
+			/*
 			 * SOLUTION: The reference below uses a custom class which extends
 			 * an ObjectInputStream and overrides the method resolveClass to
 			 * provide read ahead of the object being deserialized before the
@@ -1104,13 +1103,13 @@ public class Project2 extends Project {
 			 * AcceptListObjectInputStream which also include a parameter passed
 			 * with the expected class to be deserialized - AcceptListClass. If
 			 * the expected class is not the object deserialized, then the
-			 * AcceptListObjectInputStream thows an InvalidClassException.
+			 * AcceptListObjectInputStream throws an InvalidClassException.
 			 * 
 			 * try (ObjectInputStream ois = new ObjectInputStream(bais)) {
 			 */
 			try (AcceptListObjectInputStream ois = new AcceptListObjectInputStream(
 					bais, AcceptListClass.class)) {
-				// SOlUTION END
+				// SOLUTION END
 				return (AcceptListClass) ois.readObject();
 			} catch (StreamCorruptedException sce) {
 				throw new AppException(
@@ -1129,7 +1128,7 @@ public class Project2 extends Project {
 
 	}
 
-	/**
+	/*
 	 * SOLUTION for Milestone 2, Task 5
 	 * 
 	 * The custom AcceptListObjectInput stream is used to override resolveClass()
@@ -1148,7 +1147,7 @@ public class Project2 extends Project {
 			this.acceptListClass = acceptListClass;
 		}
 
-		/**
+		/*
 		 * Only deserialize instances of our expected accept list class
 		 */
 		@Override
@@ -1162,7 +1161,7 @@ public class Project2 extends Project {
 		}
 	}
 
-	/**
+	/*
 	 * Fictitious class used to demonstrate for deserialization
 	 * 
 	 */
@@ -1185,7 +1184,7 @@ public class Project2 extends Project {
 	}
 	// SOLUTION END Milestone 2, Task 5
 
-	/**
+	/*
 	 * Project 2, Milestone 2, Task 6
 	 * 
 	 * 
@@ -1202,7 +1201,7 @@ public class Project2 extends Project {
 	public User deserializeJson(String data) throws AppException {
 		ObjectMapper mapper = new ObjectMapper();
 
-		/**
+		/*
 		 * SOLUTION: The enableDefaultTyping is a dangerous method which allows
 		 * any Java classes to be deserialized. The method has also been
 		 * deprecated.
@@ -1224,8 +1223,7 @@ public class Project2 extends Project {
 		typeResolver.typeProperty("@CLASS");
 		mapper.setDefaultTyping(typeResolver);
 
-		/**
-		 * 
+		/*
 		 * SOLUTION: ObjectMapper configuration accepts values for Enums from the
 		 * DeserializationFeature class. By default the
 		 * FAIL_ON_UNKNOWN_PROPERTIES is enabled and this feature should not be
@@ -1242,7 +1240,7 @@ public class Project2 extends Project {
 
 		// deserialize the object and return
 		try {
-			/**
+			/*
 			 * SOLUTION: Instead of returning a generic deserialized Object, use
 			 * strong typing to the class you are expecting
 			 *
@@ -1259,7 +1257,7 @@ public class Project2 extends Project {
 
 	}
 
-	/**
+	/*
 	 * Class for Milestone 2, Task 6
 	 * 
 	 * NO CHANGES NEEDED IN THIS FILE
@@ -1286,7 +1284,7 @@ public class Project2 extends Project {
 		}
 	}
 
-	/**
+	/*
 	 * SOLUTION for Milestone 2, Task 6
 	 * 
 	 * NO CHANGES NEEDED IN THIS FILE
@@ -1312,13 +1310,13 @@ public class Project2 extends Project {
 		}
 	}
 
-	/**
+	/*
 	 * The following method does not need to be assessed in the project and is
 	 * only here as a helper function
 	 * 
 	 * Code copied from: https://rgagnon.com/javadetails/java-0596.html
 	 * 
-	 * @param b
+	 * @param password
 	 * @return String
 	 */
 	private String encryptPassword(String password) throws AppException {

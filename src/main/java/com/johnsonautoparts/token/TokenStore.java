@@ -4,8 +4,6 @@ import java.time.*;
 import java.util.*;
 import java.util.concurrent.*;
 
-import javax.servlet.http.HttpServletRequest;
-
 import com.johnsonautoparts.exception.AppException;
 
 public interface TokenStore {

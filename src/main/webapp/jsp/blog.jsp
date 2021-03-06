@@ -40,9 +40,9 @@
 		<tr><td>Please verify your blog post before submission (HTML tags P,TABLE,DIV,TR,TD allowed):</td></tr>
 		<%
 		/**
-	 	 * SOLUTION: Instead of putting the blog parameter directly back into the HTML we need to peform
+	 	 * SOLUTION: Instead of putting the blog parameter directly back into the HTML we need to perform
 	 	 *           sanitization. Unlike other times where we can use regex to remove characters or
-	 	 *           santize characters that could be bad, sometimes HTML is allowed. In these cases,
+	 	 *           sanitize characters that could be bad, sometimes HTML is allowed. In these cases,
 	 	 *           the best solution is to leverage a proven library. As the imports suggest, we will
 	 	 *           use the OWASP HTML Sanitizer to create a policy of the allowed HTML tags. The
 	 	 *           content will then be filtered to only allow the accepted tags before placing

@@ -80,7 +80,7 @@ import com.johnsonautoparts.exception.AppException;
 import com.johnsonautoparts.logger.AppLogger;
 import com.johnsonautoparts.servlet.SessionConstant;
 
-/**
+/*
  * 
  * Project4 class which contains all the method for the milestones. The task
  * number represents the steps within a milestone.
@@ -101,7 +101,7 @@ public class Project4 extends Project {
 		super(connection, httpRequest, httpResponse);
 	}
 
-	/**
+	/*
 	 * Project 4, Milestone 1, Task 1
 	 * 
 	 * TITLE: Do not trust hidden forms
@@ -128,7 +128,7 @@ public class Project4 extends Project {
 		// process login
 		boolean loginSuccess = project2.xpathLogin(userPass);
 
-		/**
+		/*
 		 * SOLUTION: The username and password are sanitized in the xpath login
 		 * and not replayed to the user so we can focus on the secureFrom
 		 * variable which is returned here and then included in a response to
@@ -144,7 +144,7 @@ public class Project4 extends Project {
 		safeData = Encode.forJavaScriptBlock(safeData);
 		// SOLUTION END
 
-		/**
+		/*
 		 * SOLUTION: replace the unsanitized text with the sanitized version
 		 * 
 		 * The original code is commented out and replaced
@@ -156,7 +156,7 @@ public class Project4 extends Project {
 		// SOLUTION END
 	}
 
-	/**
+	/*
 	 * Project 4, Milestone 1, Task 2
 	 * 
 	 * TITLE: Encoding data and escaping output for display
@@ -177,7 +177,7 @@ public class Project4 extends Project {
 	 */
 	// END Project 4, Milestone 1, Task 2
 
-	/**
+	/*
 	 * Project 4, Milestone 1, Task 3
 	 * 
 	 * TITLE: Avoid arbitrary file uploads
@@ -193,7 +193,7 @@ public class Project4 extends Project {
 	 * REF: CMU Software Engineering Institute IDS56-J CODE:
 	 * https://www.tutorialspoint.com/servlets/servlets-file-uploading.htm
 	 * 
-	 * @param int
+	 * @param numFiles
 	 * @return boolean
 	 */
 	public boolean fileUpload(int numFiles) throws AppException {
@@ -237,7 +237,7 @@ public class Project4 extends Project {
 
 				fi.write(filePath.toFile());
 
-				/**
+				/*
 				 * SOLUTION: For a more in-depth review of the actual content
 				 * type, you can use the Apache Tika library. The method
 				 * verifyContentType should be reviewed below and uncommented
@@ -269,13 +269,12 @@ public class Project4 extends Project {
 		}
 	}
 
-	/**
+	/*
 	 * SOLUTION: CMU SEI recommends using Tika library to perform a full
 	 * verification of the content-type before accepting a file.
 	 * 
-	 * Due to export restrictions, you will need to: - download the Tika library
-	 * - place the JAR into the WebContet/lib folder - right-click the
-	 * WebContent folder in Eclipse and chose refresh - uncomment the code below
+	 * Due to export restrictions, you will need to: uncommet the dependency
+	 * in the pom.xml file
 	 * 
 	 * @param f
 	 * @param contentType
@@ -302,7 +301,7 @@ public class Project4 extends Project {
 	 */
 	// SOLUTION END
 
-	/**
+	/*
 	 * Project 4, Milestone 1, Task 4
 	 * 
 	 * TITLE: Do not use printStackTrace
@@ -331,7 +330,7 @@ public class Project4 extends Project {
 								+ txtField);
 			}
 		} catch (IllegalStateException ise) {
-			/**
+			/*
 			 * SOLUTION: printStackTrace() should not be used even in this case
 			 * where the output is captured to a string. Look at
 			 * exception/AppException to see how it is structured. AppException
@@ -354,14 +353,14 @@ public class Project4 extends Project {
 			 * 
 			 * //return the error as the content return(sw.toString());
 			 */
-			throw new AppException("getAtrribute caught IllegalStateException: "
+			throw new AppException("getAttribute caught IllegalStateException: "
 					+ ise.getMessage());
 			// SOLUTION END
 		}
 
 	}
 
-	/**
+	/*
 	 * Project 4, Milestone 1, Task 5
 	 * 
 	 * TITLE: Sanitize HTML when tags are needed
@@ -395,7 +394,7 @@ public class Project4 extends Project {
 	 * @return String
 	 */
 	public String postBlog(String blogEntry) throws AppException {
-		/**
+		/*
 		 * SOLUTION: Remember that even though the data was sanitized in the
 		 * JSP, the user can still control the sending of the data to the
 		 * webapp. The same code should be repeated in this method to sanitize
@@ -420,7 +419,7 @@ public class Project4 extends Project {
 			String sql = "INSERT INTO blog(blog) VALUES (?)";
 
 			try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-				/**
+				/*
 				 * SOLUTION: Replace the blogEntry unsanitized variable with our
 				 * safe version
 				 * 
@@ -458,7 +457,7 @@ public class Project4 extends Project {
 		}
 	}
 
-	/**
+	/*
 	 * Project 4, Milestone 1, Task 6
 	 * 
 	 * TITLE: Do not add main() method to a webapp
@@ -473,7 +472,7 @@ public class Project4 extends Project {
 	 */
 	// SOLUTION END
 
-	/**
+	/*
 	 * Project 4, Milestone 2, Task 1
 	 * 
 	 * TITLE: HTTP verb (method) security
@@ -492,7 +491,7 @@ public class Project4 extends Project {
 	 */
 	// END Project 4, Milestone 2, Task 1
 
-	/**
+	/*
 	 * Project 4, Milestone 2, Task 2
 	 * 
 	 * TITLE: Avoid header injection
@@ -512,7 +511,7 @@ public class Project4 extends Project {
 	 * @return String
 	 */
 	public String addHeader(String header) throws AppException {
-		/**
+		/*
 		 * SOLUTION: Allowing unsanitized data into the headers is very
 		 * dangerous and performing filtering with regex and other methods we
 		 * used in other milestones may not even be safe. The recommendation via
@@ -537,7 +536,7 @@ public class Project4 extends Project {
 		// SOLUTION END
 	}
 
-	/**
+	/*
 	 * Project 4, Milestone 2, Task 3
 	 * 
 	 * TITLE: Servlet must not throw errors
@@ -555,7 +554,7 @@ public class Project4 extends Project {
 	 */
 	// END Project 4, Milestone 2, Task 3
 
-	/**
+	/*
 	 * Project 4, Milestone 2, Task 4
 	 * 
 	 * TITLE: Do not trust referer header for security decisions
@@ -582,7 +581,7 @@ public class Project4 extends Project {
 	 * @return String
 	 */
 
-	/**
+	/*
 	 * SOLUTION: Implementing Cross Site Request Forgery (CSRF) token avoidance
 	 * does not involve simple code changes since it required the injection of a
 	 * unique variable in the form which is know on the server side, so when the
@@ -605,7 +604,7 @@ public class Project4 extends Project {
 	 * 
 	 */
 	public String postComments(String comments) throws AppException {
-		/**
+		/*
 		 * SOLUTION: The original code is comments out below which checked the
 		 * referer header:
 		 *
@@ -624,7 +623,7 @@ public class Project4 extends Project {
 			String sql = "INSERT INTO COMMENTS(comments) VALUES (?)";
 
 			try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-				/**
+				/*
 				 * SOLUTION: A user could have changed the comments before
 				 * submitting, so we need to duplicate the same code in the JSP
 				 * here.
@@ -673,7 +672,7 @@ public class Project4 extends Project {
 		}
 	}
 
-	/**
+	/*
 	 * Project 4, Milestone 2, Task 5
 	 * 
 	 * TITLE: Do not redirect to URL from untrusted source
@@ -688,7 +687,7 @@ public class Project4 extends Project {
 	 */
 	public void redirectUser(String location) throws AppException {
 		try {
-			/**
+			/*
 			 * SOLUTION: Similar to avoiding header injection, allowing
 			 * redirects to uncontrolled URLs is unsafe. RSPEC-5146 recommends
 			 * using an explicit accept list for the URL which all redirect
@@ -714,7 +713,7 @@ public class Project4 extends Project {
 		}
 	}
 
-	/**
+	/*
 	 * Project 4, Milestone 2, Task 6
 	 * 
 	 * TITLE: Protect the webapp with security headers
@@ -737,7 +736,7 @@ public class Project4 extends Project {
 	 */
 	// END Project 4, Milestone 2, Task 6
 
-	/**
+	/*
 	 * Project 4, Milestone 3, Task 1
 	 * 
 	 * TITLE: Do not store authentication information on client
@@ -747,8 +746,8 @@ public class Project4 extends Project {
 	 * 
 	 * REF: CMU Software Engineering Institute FIO52-J
 	 * 
-	 * @param str
-	 * @return String
+	 * @param username
+	 * @return boolean
 	 */
 	public boolean rememberMe(String username) throws AppException {
 		HttpSession session = httpRequest.getSession();
@@ -776,7 +775,7 @@ public class Project4 extends Project {
 							return false;
 						}
 
-						/**
+						/*
 						 * SOLUTION: Sensitive information such as secret,
 						 * password, or keys should not be stored on the
 						 * browser. If the data is needed it can be stored in
@@ -829,7 +828,7 @@ public class Project4 extends Project {
 
 	}
 
-	/**
+	/*
 	 * Project 4, Milestone 3, Task 2
 	 * 
 	 * TITLE: LDAP authentication for bind
@@ -849,7 +848,7 @@ public class Project4 extends Project {
 		env.put(Context.INITIAL_CONTEXT_FACTORY,
 				"com.sun.jndi.ldap.LdapCtxFactory");
 
-		/**
+		/*
 		 * SOLUTION: The original code was connecting to the unencrypted LDAP on
 		 * port 389. The encrypted LDAP connection should be used to ensure
 		 * transmission security of credentials.
@@ -860,10 +859,10 @@ public class Project4 extends Project {
 		 * "ldap://localhost:389/o=JohnsonAutoParts");
 		 */
 		env.put(Context.PROVIDER_URL,
-				"ldasp://localhost:636/o=JohnsonAutoParts");
+				"ldaps://localhost:636/o=JohnsonAutoParts");
 		// SOLUTION
 
-		/**
+		/*
 		 * SOLUTION: The anonymous connection to the LDAP is not secure and an
 		 * authenticated bind should be used instead to protect user
 		 * credentials.
@@ -889,7 +888,7 @@ public class Project4 extends Project {
 		return new InitialDirContext(env);
 	}
 
-	/**
+	/*
 	 * Project 4, Milestone 3, Task 3
 	 * 
 	 * TITLE: Prevent LDAP injection
@@ -902,14 +901,15 @@ public class Project4 extends Project {
 	 * 
 	 * REF: CMU Software Engineering Institute IDS-54J
 	 * 
-	 * @param str
+	 * @param userSN
+	 * @param password
 	 * @return String
 	 */
 	public String ldapLogin(String userSN, String password)
 			throws AppException {
 		DirContext context = null;
 
-		/**
+		/*
 		 * SOLUTION: Before allowing the variables to be passed to the LDAP
 		 * search query they should be checked for characters which are not
 		 * accepted. Due to the dangers of LDAP injection, attempting to filter
@@ -966,7 +966,7 @@ public class Project4 extends Project {
 		}
 	}
 
-	/**
+	/*
 	 * Project 4, Milestone 3, Task 4
 	 * 
 	 * TITLE: Do not use getRequestSessionId
@@ -984,8 +984,8 @@ public class Project4 extends Project {
 	 * 
 	 * REF: SonarSource RSPEC-2254
 	 * 
-	 * @param str
-	 * @return String
+	 * @param role
+	 * @return boolean
 	 */
 	public boolean isRoleValid(String role) throws AppException {
 		// check for null parameter first
@@ -993,10 +993,10 @@ public class Project4 extends Project {
 			throw new AppException("Role is null");
 		}
 
-		/**
+		/*
 		 * SOLUTION: getRequestSessionId() is not trusted and getId() should be
 		 * used instead. getRequestSessionId() should only be called if it is
-		 * used to compare against the session id recieved from getId()
+		 * used to compare against the session id received from getId()
 		 * 
 		 * The original code is commented out below:
 		 *
@@ -1053,7 +1053,7 @@ public class Project4 extends Project {
 		}
 	}
 
-	/**
+	/*
 	 * Project 4, Milestone 3, Task 5
 	 * 
 	 * TITLE: Add flags to protect cookies
@@ -1064,7 +1064,7 @@ public class Project4 extends Project {
 	 * REF:
 	 * https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html#defense-in-depth-techniques
 	 * 
-	 * @param str
+	 * @param pref
 	 * @return String
 	 */
 	public String setPrefCookie(String pref) throws AppException {
@@ -1090,7 +1090,7 @@ public class Project4 extends Project {
 
 		// add the cookie to the response
 		Cookie prefCookie = new Cookie("pref", encodedToken);
-		/**
+		/*
 		 * SOLUTION: Add flags to cookies to protect them such as HttpOnly and
 		 * Secure which makes sure they are only sent over SSL. Another cookie
 		 * protect header is SameSite, but it is not implemented the same in
@@ -1110,7 +1110,7 @@ public class Project4 extends Project {
 		return ("set pref " + safePref);
 	}
 
-	/**
+	/*
 	 * Project 4, Milestone 3, Task 6
 	 * 
 	 * TITLE: Avoid leaking session data across servlet sessions
@@ -1206,7 +1206,7 @@ public class Project4 extends Project {
 
 	}
 
-	/**
+	/*
 	 * Project 4, Milestone 3, Task 7
 	 * 
 	 * TITLE: Securing Java Web Tokens (JWT)
@@ -1223,7 +1223,7 @@ public class Project4 extends Project {
 	 */
 
 	public String createJwt(String username) throws AppException {
-		/**
+		/*
 		 * SOLUTION: The HMAC SHA-256 used for signing the token is considered
 		 * safe but the problem here is the selected secret is the word
 		 * "secret". This is the default password checked in most tools so it is
@@ -1233,7 +1233,7 @@ public class Project4 extends Project {
 		 * secret key into the session with the following code:
 		 * session.setAttribute("secret", ServletUtilities.createSecret());
 		 * 
-		 * With that code, a unique secret key will be availabe from in the
+		 * With that code, a unique secret key will be available from in the
 		 * session and could be used to sign the token.
 		 * 
 		 * Of note, instead of manually building JWT, an existing framework
@@ -1281,9 +1281,9 @@ public class Project4 extends Project {
 			byte[] hmacMessage = null;
 			try {
 				Mac mac = Mac.getInstance("HmacSHA256");
-				/**
+				/*
 				 * SOLUTION: The secret in the session is already in byte[]
-				 * fromat so it does not need to be converted:
+				 * format so it does not need to be converted:
 				 *
 				 * SecretKeySpec secretKeySpec = new
 				 * SecretKeySpec(SECRET.getBytes(StandardCharsets.UTF_8),
@@ -1315,7 +1315,7 @@ public class Project4 extends Project {
 		}
 	}
 
-	/**
+	/*
 	 * Project 4, Milestone 4, Task 1
 	 * 
 	 * TITLE: Manage 3rd party libraries with Software Composition Analysis
@@ -1330,11 +1330,11 @@ public class Project4 extends Project {
 	 */
 	// END Project 4, Milestone 4, Task 1
 
-	/**
+	/*
 	 * IMPORTANT: NO CODE NEEDS TO BE REVIEWED BELOW THIS POINT
 	 */
 
-	/**
+	/*
 	 * The following method does not need to be assessed in the project and is
 	 * only here as a helper function
 	 * 
@@ -1358,13 +1358,13 @@ public class Project4 extends Project {
 		}
 	}
 
-	/**
+	/*
 	 * The following method does not need to be assessed in the project and is
 	 * only here as a helper function
 	 * 
 	 * Code copied from: https://rgagnon.com/javadetails/java-0596.html
 	 * 
-	 * @param b
+	 * @param password
 	 * @return String
 	 */
 	private static String encryptPassword(String password) throws AppException {

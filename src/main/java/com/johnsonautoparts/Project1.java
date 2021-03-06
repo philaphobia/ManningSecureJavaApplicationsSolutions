@@ -26,7 +26,7 @@ import java.security.NoSuchAlgorithmException;
 import com.johnsonautoparts.exception.AppException;
 import com.johnsonautoparts.logger.AppLogger;
 
-/**
+/*
  * 
  * SOLUTIONS INCLUDED FOR ALL MILESTONES AND TASKS
  * 
@@ -49,7 +49,7 @@ public class Project1 extends Project {
 		super(connection, httpRequest, httpResponse);
 	}
 
-	/**
+	/*
 	 * Project 1, Milestone 1, Task 1
 	 * 
 	 * TITLE: Normalize strings before validation
@@ -66,7 +66,7 @@ public class Project1 extends Project {
 		Pattern pattern = Pattern.compile("[<&>]");
 		Matcher matcher = pattern.matcher(str);
 
-		/**
+		/*
 		 * SOLUTION: normalize the string before performing check to remove
 		 * Unicode which can be used as an attack vector
 		 */
@@ -78,7 +78,7 @@ public class Project1 extends Project {
 					.replaceAll(">", "&gt;");
 		}
 
-		/**
+		/*
 		 * SOLUTION: move this before the pattern matching since normalize()
 		 * needs to
 		 */
@@ -86,7 +86,7 @@ public class Project1 extends Project {
 		return cleanStr;
 	}
 
-	/**
+	/*
 	 * Project 1, Milestone 1, Task 2
 	 * 
 	 * TITLE: Avoid leaking data with Format string
@@ -102,7 +102,7 @@ public class Project1 extends Project {
 	public String formatString(String str) throws IllegalStateException {
 		Calendar cal = new GregorianCalendar();
 
-		/**
+		/*
 		 * SOLUTION: Do not use untrusted input in the format string. Use The
 		 * format pattern to rend the untrusted content as a string
 		 */
@@ -110,7 +110,7 @@ public class Project1 extends Project {
 		return String.format("%s passed on date %tF", str, cal);
 	}
 
-	/**
+	/*
 	 * Project 1, Milestone 1, Task 3
 	 * 
 	 * TITLE: String modification before validation
@@ -129,7 +129,7 @@ public class Project1 extends Project {
 	public String validateString(String str) throws AppException {
 		String s = Normalizer.normalize(str, Form.NFKC);
 
-		/**
+		/*
 		 * SOLUTION: remove non-characters at this point before sanitization
 		 */
 		String cleanStr = s.replaceAll("[\\p{Cn}]", "");
@@ -143,7 +143,7 @@ public class Project1 extends Project {
 					"Invalid input");
 		}
 
-		/**
+		/*
 		 * SOLUTION: remove any unknown character before performing sanitization
 		 */
 		// Deletes noncharacter code points
@@ -152,7 +152,7 @@ public class Project1 extends Project {
 		return cleanStr;
 	}
 
-	/**
+	/*
 	 * Project 1, Milestone 1, Task 4
 	 * 
 	 * TITLE: Sanitize data used in regular expressions
@@ -208,7 +208,7 @@ public class Project1 extends Project {
 		}
 	}
 
-	/**
+	/*
 	 * Project 1, Milestone 1, Task 5
 	 * 
 	 * TITLE: International string attacks
@@ -240,14 +240,14 @@ public class Project1 extends Project {
 		try {
 			tempFile = Files.createTempFile("", ".tmp");
 		} catch (IOException ioe) {
-			throw new AppException("IOException in internationaliation(): "
+			throw new AppException("IOException in internationalization(): "
 					+ ioe.getMessage());
 		}
 
 		// write the text to file
 		try (PrintWriter writer = new PrintWriter(
 				new FileWriter(tempFile.toFile()))) {
-			/**
+			/*
 			 * SOLUTION: The printf method is another which has the capability
 			 * to format text with a locale Another example to avoid additional
 			 * attack vectors.
@@ -258,12 +258,12 @@ public class Project1 extends Project {
 
 			return true;
 		} catch (IOException ioe) {
-			throw new AppException("IOException in internationaliation(): "
+			throw new AppException("IOException in internationalization(): "
 					+ ioe.getMessage());
 		}
 	}
 
-	/**
+	/*
 	 * Project 1, Milestone 1, Task 6
 	 * 
 	 * TITLE: Logging unsanitized input
@@ -280,13 +280,12 @@ public class Project1 extends Project {
 	 * @return String
 	 */
 	public void logUnsanitizedText(String unsanitizedText) {
-		/**
+		/*
 		 * SOLUTION: An example for filtering out end of line characters and
 		 * tabs
 		 * 
 		 * BONUS SOLUTION: Perform the sanitization of all text in the
 		 * logger.AppLogger class
-		 * 
 		 */
 		String sanitizedText = Normalizer.normalize(unsanitizedText, Form.NFKC);
 
@@ -295,14 +294,14 @@ public class Project1 extends Project {
 		AppLogger.log("Error: " + sanitizedText);
 		// SOLUTION END
 
-		/**
+		/*
 		 * SOLUTION: The text needs to be sanitized before being sent to the log
 		 */
 		// AppLogger.log("Error: " + unsanitizedText);
 
 	}
 
-	/**
+	/*
 	 * Project 1, Milestone 1, Task 7
 	 * 
 	 * TITLE: Avoid regex bypasses
@@ -330,7 +329,7 @@ public class Project1 extends Project {
 	public String regexClean(String str) {
 		String cleanText = str.toLowerCase(Locale.ENGLISH);
 
-		/**
+		/*
 		 * SOLUTION: In the original version, the code only used replace(), so
 		 * the occurrence of "<SCRIscriptPT>" would remove the inner "script"
 		 * and leave behind the outer "<SCRIPT>" The solution should include a
@@ -340,7 +339,7 @@ public class Project1 extends Project {
 		 * This is not a complete solution for all possible methods of
 		 * identifying malicious tags the goal of this task is to demonstrate
 		 * the need for multiple iterations. The best solution would be to use
-		 * an experience library to perfrom the task such as the OWASP Encopder:
+		 * an experience library to perform the task such as the OWASP Encopder:
 		 * 
 		 * import org.owasp.encoder.Encode; ... cleanText = Encode.forHtml(str);
 		 * ...
@@ -362,7 +361,7 @@ public class Project1 extends Project {
 		}
 		// SOLUTION END
 
-		/**
+		/*
 		 * SOLUTION: The replace() call here is insufficient to replace
 		 * multi-level attacks
 		 */
@@ -371,7 +370,7 @@ public class Project1 extends Project {
 		return cleanText;
 	}
 
-	/**
+	/*
 	 * Project 1, Milestone 2, Task 1
 	 * 
 	 * TITLE: Avoid variable width encoding
@@ -403,7 +402,7 @@ public class Project1 extends Project {
 
 			while ((bytesRead = fios.read(data, offset,
 					data.length - offset)) != -1) {
-				/**
+				/*
 				 * SOLUTION: The string is not created till all of the data is
 				 * read so comment out this section
 				 * 
@@ -416,7 +415,7 @@ public class Project1 extends Project {
 				}
 			}
 
-			/**
+			/*
 			 * SOLUTION: Now build the string from the data after all of the
 			 * data is read and also define the characterset
 			 */
@@ -429,7 +428,7 @@ public class Project1 extends Project {
 
 	}
 
-	/**
+	/*
 	 * Project 1, Milestone 2, Task 2
 	 * 
 	 * TITLE: Check before encoding non-character data as a string
@@ -450,7 +449,7 @@ public class Project1 extends Project {
 		// decode base64 to String representation of BigInt
 		byte[] decodedBytes = Base64.getDecoder().decode(base64Str);
 
-		/**
+		/*
 		 * SOLUTION: Before assuming the decoded text is a string, you should
 		 * use toString() to generate a string representation of the data and
 		 * then pass it to new String(). The method getBytes() should also
@@ -463,9 +462,9 @@ public class Project1 extends Project {
 		byte[] byteArray = safeString.getBytes(StandardCharsets.UTF_8);
 		// SOLUTION END
 
-		/**
+		/*
 		 * SOLUTION: Hint for a later milestone, but this direct instantiation
-		 * of BigInterger() did not perform any check on the size of the numeric
+		 * of BigInteger() did not perform any check on the size of the numeric
 		 * representation of the string. It is also not catching
 		 * NumberFormatException which could be thrown here. These errors can be
 		 * fixed for extra credit
@@ -474,7 +473,7 @@ public class Project1 extends Project {
 		return new BigInteger(byteArray);
 	}
 
-	/**
+	/*
 	 * Project 1, Milestone 2, Task 3
 	 * 
 	 * TITLE: Double encoding attacks
@@ -497,13 +496,13 @@ public class Project1 extends Project {
 	 * @return String
 	 */
 	public String cleanBadHTMLTags(String str) {
-		/**
+		/*
 		 * SOLUTION: We will not use the matcher() and find() to look for
 		 * malicious characters We will comment out all of the previous code and
 		 * use another library.
 		 */
 
-		/**
+		/*
 		 * Pattern pattern = Pattern.compile("[<&>]"); Matcher matcher =
 		 * pattern.matcher(str);
 		 * 
@@ -515,12 +514,12 @@ public class Project1 extends Project {
 		 * "&gt;"); }
 		 **/
 
-		/**
+		/*
 		 * SOLUTION: Manually detecting and fixing encoding attacks is very
 		 * difficult, so we can use a third-party solution. The OWASP Java
 		 * Encoder has many methods for protecting input and output.
 		 * 
-		 * Use the Enocde() library to prepare the untrusted text
+		 * Use the Encode() library to prepare the untrusted text
 		 * 
 		 * At the top of the Class we need to import org.owasp.encoder.Encode;
 		 */
@@ -530,7 +529,7 @@ public class Project1 extends Project {
 		return cleanStr;
 	}
 
-	/**
+	/*
 	 * Project 1, Milestone 2, Task 4
 	 * 
 	 * TITLE: Handling encoding on file streams
@@ -551,11 +550,10 @@ public class Project1 extends Project {
 				byte[] data = new byte[1024];
 				dis.readFully(data);
 
-				/**
+				/*
 				 * SOLUTION: The new String() call did not explicitly define the
 				 * string encoding so we will comment it out and provide an
 				 * explicit definition to UTF-16LE
-				 *
 				 *
 				 * return new String(data);
 				 */
@@ -569,7 +567,7 @@ public class Project1 extends Project {
 		}
 	}
 
-	/**
+	/*
 	 * Project 1, Milestone 3, Task 1
 	 * 
 	 * TITLE: Preventing Integer overflow
@@ -587,7 +585,7 @@ public class Project1 extends Project {
 		int multiplier = 2;
 		int addedCost = 12;
 
-		/**
+		/*
 		 * SOLUTION: Java 8 added new mathematical features to avoid integer
 		 * overflow Math.addExact() and Math.multiplyExact(). These methods
 		 * should be used instead of basic math operators.
@@ -595,7 +593,7 @@ public class Project1 extends Project {
 		 * The existing code was commented out and replaced with the new Math
 		 * methods. The following import is also need to catch the overflow.
 		 * 
-		 * import java.math.AritmeticException;
+		 * import java.math.ArithmeticException;
 		 * 
 		 * int addCost = num + addedCost; int multiCost = num * multiplier;
 		 *
@@ -617,7 +615,7 @@ public class Project1 extends Project {
 
 	}
 
-	/**
+	/*
 	 * Project 1, Milestone 3, Task 2
 	 * 
 	 * TITLE: Divide by zero errors
@@ -653,7 +651,7 @@ public class Project1 extends Project {
 		return monthly / monthlyTasks;
 	}
 
-	/**
+	/*
 	 * Project 1, Milestone 3, Task 3
 	 * 
 	 * TITLE: Avoid calculations on NaN and infinity
@@ -709,7 +707,7 @@ public class Project1 extends Project {
 		}
 	}
 
-	/**
+	/*
 	 * Project 1, Milestone 3, Task 4
 	 * 
 	 * TITLE: String representation of numbers
@@ -744,15 +742,11 @@ public class Project1 extends Project {
 		 */
 		BigDecimal d = new BigDecimal(Double.valueOf(num / 1000.0).toString());
 
-		if (d.compareTo(new BigDecimal("0.001")) == 0) {
-			return true;
-		} else {
-			return false;
-		}
+		return (d.compareTo(new BigDecimal("0.001")) == 0);
 		// SOLUTION END
 	}
 
-	/**
+	/*
 	 * Project 1, Milestone 3, Task 5
 	 * 
 	 * TITLE: Generate strong random number
@@ -762,11 +756,11 @@ public class Project1 extends Project {
 	 * 
 	 * REF: CMU Software Engineering Institute MSC02-J
 	 * 
-	 * @param num
+	 * @param range
 	 * @return boolean
 	 */
 	public int randomNumGenerate(int range) throws AppException {
-		/**
+		/*
 		 * SOLUTION: The Random class does not produce strong random number
 		 * generation and developers should use SecureRandom instead.
 		 * SecureRandom requires the import below. In addition, Java 8 provides
@@ -787,7 +781,7 @@ public class Project1 extends Project {
 			return number.nextInt(range);
 		} catch (NoSuchAlgorithmException nsae) {
 			throw new AppException(
-					"randomNumGenerate caught NoSuchAlgorithException: "
+					"randomNumGenerate caught NoSuchAlgorithmException: "
 							+ nsae.getMessage());
 		}
 		// SOLUTION END

@@ -4,7 +4,30 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3d7000e1-a6ec-475e-9cf4-8b24b75886f0" name="Default Changelist" comment="" />
+    <list default="true" id="3d7000e1-a6ec-475e-9cf4-8b24b75886f0" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ManningSecureCodingSolutions.iml" beforeDir="false" afterPath="$PROJECT_DIR$/ManningSecureCodingSolutions.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/johnsonautoparts/Project.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/johnsonautoparts/Project.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/johnsonautoparts/Project1.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/johnsonautoparts/Project1.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/johnsonautoparts/Project2.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/johnsonautoparts/Project2.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/johnsonautoparts/Project3.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/johnsonautoparts/Project3.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/johnsonautoparts/Project4.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/johnsonautoparts/Project4.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/johnsonautoparts/db/DB.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/johnsonautoparts/db/DB.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/johnsonautoparts/exception/AppException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/johnsonautoparts/exception/AppException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/johnsonautoparts/exception/DBException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/johnsonautoparts/exception/DBException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/johnsonautoparts/logger/AppLogger.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/johnsonautoparts/logger/AppLogger.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/johnsonautoparts/servlet/ContextListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/johnsonautoparts/servlet/ContextListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/johnsonautoparts/servlet/RequestListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/johnsonautoparts/servlet/RequestListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/johnsonautoparts/servlet/SecurityFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/johnsonautoparts/servlet/SecurityFilter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/johnsonautoparts/servlet/ServletHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/johnsonautoparts/servlet/ServletHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/johnsonautoparts/servlet/ServletUtilities.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/johnsonautoparts/servlet/ServletUtilities.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/johnsonautoparts/servlet/SessionConstant.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/johnsonautoparts/servlet/SessionConstant.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/johnsonautoparts/servlet/SessionListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/johnsonautoparts/servlet/SessionListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/johnsonautoparts/token/TokenStore.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/johnsonautoparts/token/TokenStore.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/jsp/blog.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/jsp/blog.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/jsp/comments.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/jsp/comments.jsp" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
