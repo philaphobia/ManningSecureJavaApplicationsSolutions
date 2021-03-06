@@ -8,8 +8,9 @@
     <sourceDirectory>src</sourceDirectory>
     <plugins>
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-war-plugin</artifactId>
-        <version>2.4</version>
+        <version>3.3.1</version>
         <configuration>
           <failOnMissingWebXml>true</failOnMissingWebXml>
         </configuration>
