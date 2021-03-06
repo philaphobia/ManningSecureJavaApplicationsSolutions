@@ -11,12 +11,11 @@ The code is this release contains comments with the solutions. Only review this 
 The program was developed on Java version 1.8, so you should download the latest JRE (and JDK if you want to build) to make sure you can work with the program in Eclipse.
 
 ## Application server
-The program was developed and tested with Apache Tomcat 8.5. If you plan on deploying and testing the (app not required for the project), make sure you have the latest version of Tomcat 8.5. The webapp was
- tested with a default Apache Tomcat and can simply be deployed by copying the WAR/SecureCoding.war file to the webapps directory under the Tomcat directory.
+The program was developed and tested with Apache Tomcat 8.5. If you plan on deploying and testing the (not required for the project), make sure you have the latest version of Tomcat 8.5. The webapp was tested with a default Apache Tomcat and can simply be deployed by copying the target/ManningSecureCodingSolutions-0.0.1-SNAPSHOT.war file to the webapps directory under the Tomcat directory
 
 ## Folder structure is as follows:
    * src/main/java - source code
-   * target/ManningSecureCodingSolutions-0.0.1-SNAPSHOT.war - compiled .war file to deploy to Tomcat (not required)
+   * target/ManningSecureCodingSolutions-0.0.1-SNAPSHOT.war - compiled .war file to deploy to Tomcat (not required for the project)
    * src/main/webapp - webapp (.war) file contents
 
 
