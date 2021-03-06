@@ -6,11 +6,11 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="SecureCodingApp" />
+        <module name="ManningSecureCodingSolutions" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="SecureCodingApp" target="1.8" />
+      <module name="ManningSecureCodingSolutions" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

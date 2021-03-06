@@ -4,37 +4,163 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="728b4cf3-9d5b-4c29-b0ab-29bc54ae52df" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.name" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.name" afterDir="false" />
+    <list default="true" id="3d7000e1-a6ec-475e-9cf4-8b24b75886f0" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/ManningSecureCodingSolutions.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.classpath" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SecureCodingApp.iml" beforeDir="false" afterPath="$PROJECT_DIR$/SecureCodingApp.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.project" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.settings/.jsdtscope" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.settings/org.eclipse.jdt.core.prefs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.settings/org.eclipse.m2e.core.prefs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.settings/org.eclipse.wst.common.component" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.settings/org.eclipse.wst.common.project.facet.core.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.settings/org.eclipse.wst.jsdt.ui.superType.container" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.settings/org.eclipse.wst.jsdt.ui.superType.name" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SecureCodingApp.iml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/WAR/SecureCoding.war" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebContent/WEB-INF/classes/com/johnsonautoparts/Project.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebContent/WEB-INF/classes/com/johnsonautoparts/Project1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebContent/WEB-INF/classes/com/johnsonautoparts/Project2$AcceptListClass.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebContent/WEB-INF/classes/com/johnsonautoparts/Project2$AcceptListObjectInputStream.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebContent/WEB-INF/classes/com/johnsonautoparts/Project2$CustomTypeResolver.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebContent/WEB-INF/classes/com/johnsonautoparts/Project2$MapVariableResolver.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebContent/WEB-INF/classes/com/johnsonautoparts/Project2$User.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebContent/WEB-INF/classes/com/johnsonautoparts/Project2.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebContent/WEB-INF/classes/com/johnsonautoparts/Project3$CheckSession.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebContent/WEB-INF/classes/com/johnsonautoparts/Project3.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebContent/WEB-INF/classes/com/johnsonautoparts/Project4$MapVariableResolver.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebContent/WEB-INF/classes/com/johnsonautoparts/Project4.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebContent/WEB-INF/classes/com/johnsonautoparts/db/DB.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebContent/WEB-INF/classes/com/johnsonautoparts/exception/AppException.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebContent/WEB-INF/classes/com/johnsonautoparts/exception/DBException.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebContent/WEB-INF/classes/com/johnsonautoparts/logger/AppLogger.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebContent/WEB-INF/classes/com/johnsonautoparts/servlet/ContextListener.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebContent/WEB-INF/classes/com/johnsonautoparts/servlet/RequestListener.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebContent/WEB-INF/classes/com/johnsonautoparts/servlet/SecurityFilter.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebContent/WEB-INF/classes/com/johnsonautoparts/servlet/ServletHandler.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebContent/WEB-INF/classes/com/johnsonautoparts/servlet/ServletUtilities.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebContent/WEB-INF/classes/com/johnsonautoparts/servlet/SessionConstant.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebContent/WEB-INF/classes/com/johnsonautoparts/servlet/SessionListener.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebContent/WEB-INF/classes/com/johnsonautoparts/token/SignedJwtTokenStore.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebContent/WEB-INF/classes/com/johnsonautoparts/token/TokenStore$Token.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebContent/WEB-INF/classes/com/johnsonautoparts/token/TokenStore.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/META-INF/MANIFEST.MF" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/META-INF/context.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/WEB-INF/Owasp.CsrfGuard.overlay.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/WEB-INF/csrfguard.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/WEB-INF/csrfguard.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/WEB-INF/lib/commons-beanutils-core-1.7.0.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/WEB-INF/lib/commons-collections-3.2.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/WEB-INF/lib/commons-fileupload-1.4.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/WEB-INF/lib/csrfguard-3.1.0.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/WEB-INF/lib/derby.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/WEB-INF/lib/derbyshared.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/WEB-INF/lib/derbytools.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/WEB-INF/lib/guava-30.1-jre.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/WEB-INF/lib/jackson-annotations-2.7.9.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/WEB-INF/lib/jackson-core-2.7.9.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/WEB-INF/lib/jackson-databind-2.7.9.7.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/WEB-INF/lib/javax.json-1.1.4.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/WEB-INF/lib/log4j-1.2.16.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/WEB-INF/lib/nimbus-jose-jwt-9.4.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/WEB-INF/lib/owasp-encoder-1.2.3.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/WEB-INF/lib/owasp-java-html-sanitizer-20190325.1.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/WEB-INF/web.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/README_DO_NOT_TOUCH_FILES.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/log/README_DO_NOT_TOUCH_FILES.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/log/log.ctrl" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/log/log2.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/log/logmirror.ctrl" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/seg0/README_DO_NOT_TOUCH_FILES.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/seg0/c10.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/seg0/c101.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/seg0/c111.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/seg0/c121.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/seg0/c130.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/seg0/c141.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/seg0/c150.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/seg0/c161.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/seg0/c171.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/seg0/c180.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/seg0/c191.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/seg0/c1a1.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/seg0/c1b1.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/seg0/c1c0.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/seg0/c1d1.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/seg0/c1e0.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/seg0/c1f1.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/seg0/c20.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/seg0/c200.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/seg0/c211.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/seg0/c221.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/seg0/c230.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/seg0/c241.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/seg0/c251.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/seg0/c260.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/seg0/c271.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/seg0/c281.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/seg0/c290.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/seg0/c2a1.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/seg0/c2b1.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/seg0/c2c1.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/seg0/c2d0.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/seg0/c2e1.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/seg0/c2f0.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/seg0/c300.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/seg0/c31.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/seg0/c311.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/seg0/c321.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/seg0/c331.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/seg0/c340.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/seg0/c351.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/seg0/c361.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/seg0/c371.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/seg0/c380.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/seg0/c391.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/seg0/c3a1.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/seg0/c3b1.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/seg0/c3c0.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/seg0/c3d1.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/seg0/c3e1.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/seg0/c3f1.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/seg0/c400.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/seg0/c41.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/seg0/c411.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/seg0/c421.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/seg0/c430.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/seg0/c441.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/seg0/c451.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/seg0/c461.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/seg0/c470.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/seg0/c481.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/seg0/c490.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/seg0/c4a1.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/seg0/c4b0.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/seg0/c4c0.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/seg0/c4d0.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/seg0/c4e0.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/seg0/c4f0.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/seg0/c51.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/seg0/c510.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/seg0/c60.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/seg0/c71.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/seg0/c81.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/seg0/c90.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/seg0/ca1.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/seg0/cb1.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/seg0/cc0.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/seg0/cd1.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/seg0/ce1.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/seg0/cf0.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/db/service.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/jsp/accessdenied.jsp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/jsp/blog.jsp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/jsp/comments.jsp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/jsp/login.jsp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/resources/login.qry" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/resources/schema.xsd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebContent/resources/users.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/servlet-api.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/johnsonautoparts/Project.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/johnsonautoparts/Project1.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/johnsonautoparts/Project2.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/johnsonautoparts/Project3.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/johnsonautoparts/Project4.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/johnsonautoparts/db/DB.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/johnsonautoparts/exception/AppException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/johnsonautoparts/exception/DBException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/johnsonautoparts/logger/AppLogger.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/johnsonautoparts/servlet/ContextListener.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/johnsonautoparts/servlet/RequestListener.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/johnsonautoparts/servlet/SecurityFilter.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/johnsonautoparts/servlet/ServletHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/johnsonautoparts/servlet/ServletUtilities.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/johnsonautoparts/servlet/SessionConstant.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/johnsonautoparts/servlet/SessionListener.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/johnsonautoparts/token/SignedJwtTokenStore.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/johnsonautoparts/token/TokenStore.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/ManningSecureCodingSolutions-0.0.1-SNAPSHOT.war" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -44,7 +170,8 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectId" id="1nkpIfacoApqTsL1dSTNkNmno5z" />
+  <component name="ProjectId" id="1pO0njly3m0NWlAF8QTtgCQ7rTE" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -52,20 +179,29 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="project.structure.last.edited" value="Artifacts" />
-    <property name="project.structure.proportion" value="0.0" />
-    <property name="project.structure.side.proportion" value="0.0" />
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="728b4cf3-9d5b-4c29-b0ab-29bc54ae52df" name="Default Changelist" comment="" />
-      <created>1611943897438</created>
+      <changelist id="3d7000e1-a6ec-475e-9cf4-8b24b75886f0" name="Default Changelist" comment="" />
+      <created>1615038998309</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1611943897438</updated>
+      <updated>1615038998309</updated>
     </task>
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>

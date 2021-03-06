@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/SecureCodingApp.iml" filepath="$PROJECT_DIR$/SecureCodingApp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ManningSecureCodingSolutions.iml" filepath="$PROJECT_DIR$/ManningSecureCodingSolutions.iml" />
     </modules>
   </component>
 </project>
