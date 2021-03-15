@@ -1194,7 +1194,7 @@ public class Project4 extends Project {
 			resolver.addVariable(null, "password", passHash);
 
 			// return the boolean of the evaluation
-			return ( expression.evaluate(doc, XPathConstants.NODE) == null );
+			return ( expression.evaluate(doc, XPathConstants.NODE) != null );
 		} catch (ParserConfigurationException | SAXException
 				| XPathException xmle) {
 			throw new AppException(

@@ -57,7 +57,7 @@ import com.johnsonautoparts.exception.AppException;
 import com.johnsonautoparts.logger.AppLogger;
 import com.johnsonautoparts.servlet.SessionConstant;
 
-/**
+/*
  * 
  * Project2 class which contains all the method for the milestones. The task
  * number represents the steps within a milestone.
@@ -73,12 +73,11 @@ import com.johnsonautoparts.servlet.SessionConstant;
  */
 public class Project2 extends Project {
 
-	public Project2(Connection connection, HttpServletRequest httpRequest,
-			HttpServletResponse httpResponse) {
+	public Project2(Connection connection, HttpServletRequest httpRequest, HttpServletResponse httpResponse) {
 		super(connection, httpRequest, httpResponse);
 	}
 
-	/**
+	/*
 	 * Project 2, Milestone 1, Task 1
 	 * 
 	 * TITLE: Protect the database from SQL injection
@@ -163,7 +162,7 @@ public class Project2 extends Project {
 		}
 	}
 
-	/**
+	/*
 	 * Project 2, Milestone 1, Task 2
 	 * 
 	 * TITLE: Avoid SQL injection protection errors
@@ -929,10 +928,9 @@ public class Project2 extends Project {
 	public boolean xpathLogin(String userPass) throws AppException {
 		// create a path to the webapp
 		Path userDbPath = null;
+
 		try {
-			userDbPath = Paths.get(System.getProperty("catalina.base"),
-					"webapps", httpRequest.getServletContext().getContextPath(),
-					"resources", "users.xml");
+			userDbPath = ServletUtilities.getUserDbPath(httpRequest);
 		} catch (InvalidPathException ipe) {
 			throw new AppException("xpathLogin passed and invalid path");
 		}
@@ -1336,8 +1334,7 @@ public class Project2 extends Project {
 
 			return sha1.toString();
 		} catch (NoSuchAlgorithmException nse) {
-			throw new AppException(
-					"encryptPassword got algo exception: " + nse.getMessage());
+			throw new AppException("encryptPassword got algo exception: " + nse.getMessage());
 		}
 
 	}

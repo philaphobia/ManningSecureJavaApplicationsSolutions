@@ -86,4 +86,15 @@ public class ServletUtilities {
 		return sharedSecret;
 	}
 
+	/*
+	 * Provide a path to the User DB XML file
+         */
+	public static String getUserDbPath(HttpServletRequest httpRequest) throws InvalidPathException {
+		Path path = Paths.get(System.getProperty("catalina.base"),
+				"webapps", httpRequest.getContextPath(),
+				"resources", "users.xml");
+
+		return path.toString();
+	}
+
 }
