@@ -41,6 +41,7 @@ import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathFactory;
 import javax.xml.xpath.XPathVariableResolver;
 
+import com.johnsonautoparts.servlet.ServletUtilities;
 import org.w3c.dom.Document;
 
 import org.xml.sax.InputSource;
@@ -927,7 +928,7 @@ public class Project2 extends Project {
 	 */
 	public boolean xpathLogin(String userPass) throws AppException {
 		// create a path to the webapp
-		Path userDbPath = null;
+		String userDbPath = null;
 
 		try {
 			userDbPath = ServletUtilities.getUserDbPath(httpRequest);

@@ -132,7 +132,8 @@ public class Project1 extends Project {
 		/*
 		 * SOLUTION: remove non-characters at this point before sanitization
 		 */
-		String cleanStr = s.replaceAll("[\\p{Cn}]", "");
+		//String cleanStr = s.replaceAll("[\\p{Cn}]", "");
+		String cleanStr =  s.replaceAll("!", "");
 
 		// Simple pattern match to remove <script> tag
 		Pattern pattern = Pattern.compile("<script>");
@@ -147,7 +148,7 @@ public class Project1 extends Project {
 		 * SOLUTION: remove any unknown character before performing sanitization
 		 */
 		// Deletes noncharacter code points
-		// String cleanStr = s.replaceAll("[\\p{Cn}]", "");
+		// return s.replaceAll("!", "");
 
 		return cleanStr;
 	}
@@ -161,30 +162,30 @@ public class Project1 extends Project {
 	 * is inserted in a regex expression. This may lead to leaking of sensitive
 	 * data or bypassing security checks.
 	 * 
+	 * The following method allows users to search errorr marked as public
+	 * but not filtering out regex could allow a malicious user to bypass the
+	 * filter if their search was ".*)|(.*
+	 *
 	 * REF: CMU Software Engineering Institute IDS08-J
 	 * 
 	 * @param search
 	 * @return boolean
 	 */
-	public boolean regularExpression(String search) {
+	public String searchErrorMessage(String search) {
 		/*
 		 * SOLUTION: Do not insert untrusted data directly into a regex.
 		 * Sanitize the data first by removing characters which could be
 		 * interpreted in the regex
+		 *
+		 * In the following sample solution, a regex is used to match
+		 * all characters which are letters and number and replace those
+		 * with empty
 		 */
-		StringBuilder sb = new StringBuilder(search.length());
-		for (int i = 0; i < search.length(); ++i) {
-			char ch = search.charAt(i);
-			if (Character.isLetterOrDigit(ch) || ch == ' ' || ch == '\'') {
-				sb.append(ch);
-			}
-		}
-
-		search = sb.toString();
+		search = search.replaceAll("[^a-zA-Z0-9]", "");
 		// SOLUTION END
 
 		// Sanitize search string
-		String regex = "(.* password\\[\\w+\\] .*" + search + ".*)";
+		String regex = ".* public user: \\w+ message: .*(" + search + ".*)";
 		Pattern searchPattern = Pattern.compile(regex);
 
 		// retrieve the error even from the session
@@ -193,7 +194,7 @@ public class Project1 extends Project {
 		// make sure data was retrieved from the attribute
 		Object errorEventObject = session.getAttribute("error_event");
 		if (errorEventObject == null) {
-			return false;
+			return null;
 		}
 
 		// make sure the content is a String before comparing
@@ -201,10 +202,15 @@ public class Project1 extends Project {
 			Matcher patternMatcher = searchPattern
 					.matcher(errorEventObject.toString());
 
-			// return boolean result of the find() operation
-			return patternMatcher.find();
+			// return the matching text
+			if (patternMatcher.find() ) {
+				return patternMatcher.group(0);
+			} else {
+				return null;
+			}
+
 		} else {
-			return false;
+			return null;
 		}
 	}
 
@@ -686,8 +692,7 @@ public class Project1 extends Project {
 			 * 
 			 * The original check is commented out
 			 *
-			 * //check if we received the expected result if (result ==
-			 * Double.NaN) {
+			 * //check if we received the expected result return (result == Double.NaN) {
 			 *
 			 */
 			if (Double.isNaN(result)) {

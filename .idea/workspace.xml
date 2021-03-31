@@ -6,10 +6,11 @@
   <component name="ChangeListManager">
     <list default="true" id="3d7000e1-a6ec-475e-9cf4-8b24b75886f0" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/johnsonautoparts/Project1.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/johnsonautoparts/Project1.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/johnsonautoparts/Project2.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/johnsonautoparts/Project2.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/johnsonautoparts/Project4.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/johnsonautoparts/Project4.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/johnsonautoparts/db/DB.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/johnsonautoparts/db/DB.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/johnsonautoparts/servlet/ServletUtilities.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/johnsonautoparts/servlet/ServletUtilities.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/ManningSecureCodingSolutions-0.0.1-SNAPSHOT.war" beforeDir="false" afterPath="$PROJECT_DIR$/target/ManningSecureCodingSolutions-0.0.1-SNAPSHOT.war" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tools/example_curl.sh" beforeDir="false" afterPath="$PROJECT_DIR$/tools/example_curl.sh" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

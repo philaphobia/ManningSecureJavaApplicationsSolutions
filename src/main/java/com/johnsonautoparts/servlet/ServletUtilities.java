@@ -1,10 +1,15 @@
 package com.johnsonautoparts.servlet;
 
 import java.io.*;
+import java.nio.file.InvalidPathException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.SecureRandom;
 
 import javax.json.Json;
 import javax.json.JsonObject;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.johnsonautoparts.logger.AppLogger;
@@ -88,13 +93,41 @@ public class ServletUtilities {
 
 	/*
 	 * Provide a path to the User DB XML file
-         */
+	 * @param HttpServletRequest
+	 * @return String of the path
+	 */
 	public static String getUserDbPath(HttpServletRequest httpRequest) throws InvalidPathException {
 		Path path = Paths.get(System.getProperty("catalina.base"),
 				"webapps", httpRequest.getContextPath(),
 				"resources", "users.xml");
 
 		return path.toString();
+	}
+
+	/*
+	 * Provide the path to the Derby DB
+	 * @param ServletContext
+	 * @return String of the path
+	 */
+	public static String getDerbyDbPath(ServletContext context) {
+		String testDbPath = "src/main/webapp/db";
+
+		//if context is null then use source testing path
+		if(context == null) {
+			return(testDbPath);
+		}
+		else {
+			StringBuilder sb = new StringBuilder();
+
+			sb.append(System.getProperty("catalina.home") );
+			sb.append(File.separator);
+			sb.append("webapps");
+			sb.append(context.getContextPath());
+			sb.append(File.separator);
+			sb.append("db");
+
+			return sb.toString();
+		}
 	}
 
 }
